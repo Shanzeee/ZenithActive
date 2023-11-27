@@ -7,7 +7,7 @@ public class UserMapper {
 
     public UserResponse mapToResponse(User user){
         return UserResponse.builder()
-                .id(user.getId())
+                .id(user.getUserId())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .gender(user.getGender().toString())

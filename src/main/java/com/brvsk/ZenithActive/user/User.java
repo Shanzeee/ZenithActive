@@ -1,19 +1,18 @@
 package com.brvsk.ZenithActive.user;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
 @Table(name = "users")
 @Entity(name = "Users")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -24,9 +23,7 @@ public class User {
     private UUID id;
     private String firstName;
     private String lastName;
-    @Email
-    private String email;
     @Enumerated
-    private Role role;
+    private Gender gender;
 
 }

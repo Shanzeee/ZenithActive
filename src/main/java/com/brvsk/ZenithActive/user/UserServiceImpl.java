@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
 
     private User toEntity(UserRequest userRequest){
         return User.builder()
+                .id(UUID.randomUUID())
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .gender(userRequest.getGender())

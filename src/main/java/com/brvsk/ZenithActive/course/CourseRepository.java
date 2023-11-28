@@ -17,21 +17,27 @@ public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     @Query("SELECT c FROM Courses c " +
             "WHERE c.dayOfWeek = :dayOfWeek " +
-            "AND ((c.startTime BETWEEN :startTime AND :endTime) OR (c.endTime BETWEEN :startTime AND :endTime)) " +
-            "AND c.facilities IN :facilities")
+            "AND :endTime > c.startTime AND :startTime < c.endTime " +
+            "AND :facility = c.facility")
     List<Course> findOverlappingCourses(
             @Param("dayOfWeek") DayOfWeek dayOfWeek,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime,
-            @Param("facilities") List<Facility> facilities);
+            @Param("facility") Facility facility
+    );
 
     @Query("SELECT c FROM Courses c " +
             "WHERE c.dayOfWeek = :dayOfWeek " +
-            "AND ((c.startTime BETWEEN :startTime AND :endTime) OR (c.endTime BETWEEN :startTime AND :endTime)) " +
-            "AND c.instructor = :instructor")
+            "AND :endTime > c.startTime AND :startTime < c.endTime " +
+            "AND :instructor = c.instructor")
     List<Course> findOverlappingInstructorCourses(
             @Param("dayOfWeek") DayOfWeek dayOfWeek,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime,
-            @Param("instructor") Instructor instructor);
+            @Param("instructor") Instructor instructor
+    );
+
+    List<Course> getCoursesByCourseType(CourseType courseType);
+
+    List<Course> getCoursesByInstructor_UserId(UUID instructorId);
 }

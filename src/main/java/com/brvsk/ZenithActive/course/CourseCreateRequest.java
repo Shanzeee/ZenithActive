@@ -8,7 +8,6 @@ import lombok.Getter;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -30,7 +29,7 @@ public class CourseCreateRequest {
     @NotNull
     private LocalTime endTime;
     @NotNull
-    private List<UUID> facilitiesId;
+    private UUID facilityId;
     @NotNull
     private UUID instructorId;
 }

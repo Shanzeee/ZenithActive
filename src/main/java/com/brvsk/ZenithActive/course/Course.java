@@ -7,7 +7,6 @@ import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 
 @Table(name = "courses")
@@ -30,8 +29,10 @@ public class Course {
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
-    @OneToMany
-    private List<Facility> facilities;
     @ManyToOne
+    @JoinColumn(name = "facility_id")
+    private Facility facility;
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 }

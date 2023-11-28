@@ -1,8 +1,8 @@
 package com.brvsk.ZenithActive.course;
 
 import com.brvsk.ZenithActive.facility.Facility;
+import com.brvsk.ZenithActive.facility.FacilityNotFoundException;
 import com.brvsk.ZenithActive.facility.FacilityRepository;
-import com.brvsk.ZenithActive.facility.FacilityType;
 import com.brvsk.ZenithActive.instructor.Instructor;
 import com.brvsk.ZenithActive.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,27 +22,52 @@ public class CourseServiceImpl implements CourseService{
     private final CourseRepository courseRepository;
     private final InstructorRepository instructorRepository;
     private final FacilityRepository facilityRepository;
+    private final CourseMapper courseMapper;
 
     @Override
     public void createNewCourse(CourseCreateRequest request){
         Instructor instructor = instructorRepository.findById(request.getInstructorId())
                 .orElseThrow(() -> new UserNotFoundException(request.getInstructorId()));
 
-        List<Facility> facilities = facilityRepository.findAllById(request.getFacilitiesId());
-        validateFacilityTypes(facilities);
+        Facility facility = facilityRepository.findById(request.getFacilityId())
+                .orElseThrow(() -> new FacilityNotFoundException(request.getFacilityId()));
 
-        validateCourseHours(request.getDayOfWeek(), request.getStartTime(), request.getEndTime(), facilities);
+
+        validateCourseHours(request.getDayOfWeek(), request.getStartTime(), request.getEndTime(), facility);
         validateInstructorAvailability(request.getDayOfWeek(), request.getStartTime(), request.getEndTime(), instructor);
 
-
         Course courseToAdd = toEntity(request);
-        courseToAdd.setFacilities(facilities);
+        courseToAdd.setFacility(facility);
         courseToAdd.setInstructor(instructor);
         courseRepository.save(courseToAdd);
     }
 
-    private void validateCourseHours(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, List<Facility> facilities) {
-        List<Course> overlappingCourses = courseRepository.findOverlappingCourses(dayOfWeek, startTime, endTime, facilities);
+    @Override
+    public List<CourseResponse> getAllCourses() {
+        return courseRepository.findAll()
+                .stream()
+                .map(courseMapper::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CourseResponse> getCoursesForCourseType(CourseType courseType) {
+        return courseRepository.getCoursesByCourseType(courseType)
+                .stream()
+                .map(courseMapper::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CourseResponse> getCoursesForInstructor(UUID instructorId) {
+        return courseRepository.getCoursesByInstructor_UserId(instructorId)
+                .stream()
+                .map(courseMapper::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    private void validateCourseHours(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Facility facility) {
+        List<Course> overlappingCourses = courseRepository.findOverlappingCourses(dayOfWeek, startTime, endTime, facility);
 
         if (!overlappingCourses.isEmpty()) {
             throw new IllegalArgumentException("The course hours overlap with existing courses.");
@@ -52,17 +79,6 @@ public class CourseServiceImpl implements CourseService{
 
         if (!overlappingCourses.isEmpty()) {
             throw new IllegalArgumentException("The instructor is not available during the specified hours.");
-        }
-    }
-
-    private void validateFacilityTypes(List<Facility> facilities) {
-        if (facilities.size() > 1) {
-            FacilityType firstFacilityType = facilities.get(0).getFacilityType();
-            for (Facility facility : facilities) {
-                if (facility.getFacilityType() != firstFacilityType) {
-                    throw new IllegalArgumentException("All facilities must have the same type.");
-                }
-            }
         }
     }
 

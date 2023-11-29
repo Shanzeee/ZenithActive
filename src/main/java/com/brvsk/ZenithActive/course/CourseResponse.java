@@ -18,6 +18,7 @@ public class CourseResponse {
     private String courseName;
     private String courseDescription;
     private Integer groupSize;
+    private Integer currentEnrolment;
     private DayOfWeek dayOfWeek;
     private String courseDuration;
     private String facilityName;

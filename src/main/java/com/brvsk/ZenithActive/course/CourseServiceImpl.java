@@ -5,13 +5,19 @@ import com.brvsk.ZenithActive.facility.FacilityNotFoundException;
 import com.brvsk.ZenithActive.facility.FacilityRepository;
 import com.brvsk.ZenithActive.instructor.Instructor;
 import com.brvsk.ZenithActive.instructor.InstructorRepository;
+import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.member.MemberMapper;
+import com.brvsk.ZenithActive.member.MemberRepository;
+import com.brvsk.ZenithActive.member.MemberResponse;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,6 +29,8 @@ public class CourseServiceImpl implements CourseService{
     private final InstructorRepository instructorRepository;
     private final FacilityRepository facilityRepository;
     private final CourseMapper courseMapper;
+    private final MemberRepository memberRepository;
+    private final MemberMapper memberMapper;
 
     @Override
     public void createNewCourse(CourseCreateRequest request){
@@ -64,6 +72,32 @@ public class CourseServiceImpl implements CourseService{
                 .stream()
                 .map(courseMapper::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void enrolMemberToCourse(UUID courseId, UUID userId){
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId));
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        course.getEnrolledMembers().add(member);
+        member.getEnrolledCourses().add(course);
+
+        courseRepository.save(course);
+        memberRepository.save(member);
+    }
+
+    @Override
+    public Set<MemberResponse> getMembersForCourse(UUID courseId){
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId));
+
+        return course.getEnrolledMembers()
+                .stream()
+                .map(memberMapper::toMemberResponse)
+                .collect(Collectors.toSet());
     }
 
     private void validateCourseHours(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Facility facility) {

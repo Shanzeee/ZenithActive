@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.course;
 
+import com.brvsk.ZenithActive.member.MemberResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -27,6 +29,12 @@ public class CourseController {
         }
     }
 
+    @PostMapping("/enroll")
+    public ResponseEntity<String> enrollMemberToCourse(@RequestParam UUID courseId, @RequestParam UUID userId) {
+        courseService.enrolMemberToCourse(courseId, userId);
+        return ResponseEntity.ok("Member enrolled to course successfully");
+    }
+
     @GetMapping()
     public List<CourseResponse> getAllCourses() {
         return courseService.getAllCourses();
@@ -40,5 +48,11 @@ public class CourseController {
     @GetMapping("/byInstructorId/{instructorId}")
     public List<CourseResponse> getCoursesForInstructor(@PathVariable UUID instructorId) {
         return courseService.getCoursesForInstructor(instructorId);
+    }
+
+    @GetMapping("/{courseId}/members")
+    public ResponseEntity<Set<MemberResponse>> getMembersForCourse(@PathVariable UUID courseId) {
+        Set<MemberResponse> members = courseService.getMembersForCourse(courseId);
+        return ResponseEntity.ok(members);
     }
 }

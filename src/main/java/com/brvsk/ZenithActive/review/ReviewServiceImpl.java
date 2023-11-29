@@ -9,10 +9,15 @@ import com.brvsk.ZenithActive.member.Member;
 import com.brvsk.ZenithActive.member.MemberRepository;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -22,6 +27,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final InstructorRepository instructorRepository;
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
+    private final ReviewMapper reviewMapper;
 
     @Transactional
     @Override
@@ -43,6 +49,54 @@ public class ReviewServiceImpl implements ReviewService{
         memberRepository.save(member);
         instructorRepository.save(instructor);
         courseRepository.save(course);
+    }
+
+    @Override
+    public Page<ReviewResponse> getCourseReviews(UUID courseId, Pageable pageable){
+
+        Page<Review> reviews = reviewRepository.findByCourseId(courseId, pageable);
+
+        List<ReviewResponse> reviewResponseSet = reviews.getContent().stream()
+                .map(reviewMapper::toReviewCourseResponse)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(reviewResponseSet, reviews.getPageable(), reviews.getTotalElements());
+    }
+
+    @Override
+    public Page<ReviewResponse> getInstructorReviews(UUID instructorId, Pageable pageable){
+
+        Page<Review> reviews = reviewRepository.findByInstructorUserId(instructorId, pageable);
+
+        List<ReviewResponse> reviewResponseSet = reviews.getContent().stream()
+                .map(reviewMapper::toReviewInstructorResponse)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(reviewResponseSet, reviews.getPageable(), reviews.getTotalElements());
+    }
+
+    @Override
+    public Double getAverageInstructorRating(UUID instructorId) {
+        throwIfInstructorNotExists(instructorId);
+        return reviewRepository.getAverageInstructorRating(instructorId);
+    }
+
+    @Override
+    public Double getAverageCourseRating(UUID courseId) {
+        throwIfCourseNotExists(courseId);
+        return reviewRepository.getAverageCourseRating(courseId);
+    }
+
+    private void throwIfInstructorNotExists(UUID instructorId){
+        if (!instructorRepository.existsById(instructorId)) {
+            throw new UserNotFoundException(instructorId);
+        }
+    }
+
+    private void throwIfCourseNotExists(UUID courseId) {
+        if (!courseRepository.existsById(courseId)){
+            throw new CourseNotFoundException(courseId);
+        }
     }
 
     private Member getMemberById(UUID memberId) {

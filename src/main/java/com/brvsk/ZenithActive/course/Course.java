@@ -2,11 +2,14 @@ package com.brvsk.ZenithActive.course;
 
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.instructor.Instructor;
+import com.brvsk.ZenithActive.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Table(name = "courses")
@@ -26,6 +29,8 @@ public class Course {
     private String name;
     private String description;
     private Integer groupSize;
+    @ManyToMany(mappedBy = "enrolledCourses", fetch = FetchType.EAGER)
+    private Set<Member> enrolledMembers = new HashSet<>();
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
@@ -36,3 +41,6 @@ public class Course {
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 }
+
+
+

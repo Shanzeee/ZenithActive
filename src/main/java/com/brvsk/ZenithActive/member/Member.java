@@ -1,11 +1,9 @@
 package com.brvsk.ZenithActive.member;
 
 import com.brvsk.ZenithActive.course.Course;
+import com.brvsk.ZenithActive.review.Review;
 import com.brvsk.ZenithActive.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,4 +28,6 @@ public class Member extends User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course> enrolledCourses = new HashSet<>();
+    @OneToMany(mappedBy = "member")
+    private Set<Review> reviews = new HashSet<>();
 }

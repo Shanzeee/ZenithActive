@@ -3,6 +3,7 @@ package com.brvsk.ZenithActive.course;
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.instructor.Instructor;
 import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.review.Review;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,6 +32,8 @@ public class Course {
     private Integer groupSize;
     @ManyToMany(mappedBy = "enrolledCourses", fetch = FetchType.EAGER)
     private Set<Member> enrolledMembers = new HashSet<>();
+    @OneToMany(mappedBy = "course")
+    private Set<Review> reviews = new HashSet<>();
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;

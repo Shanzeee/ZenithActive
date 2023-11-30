@@ -30,4 +30,6 @@ public class Member extends User {
     private Set<Course> enrolledCourses = new HashSet<>();
     @OneToMany(mappedBy = "member")
     private Set<Review> reviews = new HashSet<>();
+    @Column(length = 1000)
+    private String qrCode;
 }

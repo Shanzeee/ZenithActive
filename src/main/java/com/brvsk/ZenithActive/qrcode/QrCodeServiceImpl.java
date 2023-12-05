@@ -13,6 +13,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.util.Base64;
@@ -50,6 +51,24 @@ public class QrCodeServiceImpl implements QrCodeService{
             byte[] qrCodeBytes = outputStream.toByteArray();
 
             return Base64.getEncoder().encodeToString(qrCodeBytes);
+        } catch (WriterException e) {
+            System.err.println("Error generating QR code: " + e.getMessage());
+            return null;
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public BufferedImage generateQrCodeImage(QrCode data) {
+        try {
+            Map<EncodeHintType, Object> hints = new HashMap<>();
+            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+            QRCodeWriter writer = new QRCodeWriter();
+            BitMatrix bitMatrix = writer.encode(data.toString(), BarcodeFormat.QR_CODE, 200, 200, hints);
+
+            return MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
             System.err.println("Error generating QR code: " + e.getMessage());
             return null;

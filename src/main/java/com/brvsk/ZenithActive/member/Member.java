@@ -35,6 +35,10 @@ public class Member extends User {
     private Set<Review> reviews = new HashSet<>();
     @OneToMany(mappedBy = "member")
     private List<TrainingPlanRequest> trainingPlanRequestList = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "training_plan_paths", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "path")
+    private Set<String> trainingPlanPaths = new HashSet<>();
     @Column(length = 1000)
     private String qrCode;
 }

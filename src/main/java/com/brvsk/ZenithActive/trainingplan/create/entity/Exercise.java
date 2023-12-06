@@ -15,7 +15,10 @@ public class Exercise {
 
     @Override
     public String toString() {
-        return  "exercise: " + exerciseType + "\n" +
+        if (exerciseType == ExerciseType.REST_DAY){
+            return "REST DAY";
+        }
+        return  exerciseType + "\n" +
                 "sets: " + sets + "\n" +
                 "reps: " + reps + "\n";
     }

@@ -30,6 +30,7 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
                 .orElseThrow(() -> new UserNotFoundException(command.getMemberId()));
 
         TrainingPlanRequest trainingPlanRequest = TrainingPlanRequest.builder()
+                .id(UUID.randomUUID())
                 .created(false)
                 .member(member)
                 .memberInfo(command.getMemberInfo())

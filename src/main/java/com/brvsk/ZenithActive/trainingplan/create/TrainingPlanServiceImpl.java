@@ -4,12 +4,16 @@ import com.brvsk.ZenithActive.instructor.Instructor;
 import com.brvsk.ZenithActive.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.member.Member;
 import com.brvsk.ZenithActive.member.MemberRepository;
+import com.brvsk.ZenithActive.pdf.PdfTrainingPlanGenerator;
 import com.brvsk.ZenithActive.trainingplan.create.dto.ExerciseCreateRequest;
 import com.brvsk.ZenithActive.trainingplan.create.dto.TrainingDayCreateRequest;
 import com.brvsk.ZenithActive.trainingplan.create.dto.TrainingPlanCreateRequest;
 import com.brvsk.ZenithActive.trainingplan.create.entity.Exercise;
 import com.brvsk.ZenithActive.trainingplan.create.entity.TrainingDay;
 import com.brvsk.ZenithActive.trainingplan.create.entity.TrainingPlan;
+import com.brvsk.ZenithActive.trainingplan.request.TrainingPlanRequestRepository;
+import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
+import com.brvsk.ZenithActive.trainingplan.request.exception.TrainingPlanRequestNotFoundException;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,14 +21,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.brvsk.ZenithActive.pdf.PdfGenerator.createTrainingPlanPdf;
-
 @Service
 @RequiredArgsConstructor
 public class TrainingPlanServiceImpl implements TrainingPlanService {
 
     private final MemberRepository memberRepository;
     private final InstructorRepository instructorRepository;
+    private final TrainingPlanRequestRepository trainingPlanRequestRepository;
 
     @Override
     public void createTrainingPlan(TrainingPlanCreateRequest request) {
@@ -34,13 +37,25 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
         Instructor instructor = instructorRepository.findById(request.getInstructorId())
                 .orElseThrow(() -> new UserNotFoundException(request.getInstructorId()));
 
+        TrainingPlanRequest trainingPlanRequest = trainingPlanRequestRepository.findById(request.getTrainingPlanRequestId())
+                .orElseThrow(() -> new TrainingPlanRequestNotFoundException(request.getTrainingPlanRequestId()));
+
         TrainingPlan trainingPlan = TrainingPlan.builder()
                 .member(member)
                 .instructor(instructor)
+                .trainingPlanRequest(trainingPlanRequest)
                 .trainingDays(mapTrainingDays(request.getTrainingDays()))
                 .build();
 
-        createTrainingPlanPdf(trainingPlan);
+        PdfTrainingPlanGenerator.createTrainingPlanPdf(trainingPlan, "training_plans", trainingPlan.getTrainingPlanRequest().getId().toString());
+        String pathToTrainingPlanPdf = "training_plans/"
+                + request.getMemberId() + "/"
+                + request.getTrainingPlanRequestId() + ".pdf";
+        member.getTrainingPlanPaths().add(pathToTrainingPlanPdf);
+        memberRepository.save(member);
+
+        trainingPlanRequest.setCreated(true);
+        trainingPlanRequestRepository.save(trainingPlanRequest);
     }
 
 

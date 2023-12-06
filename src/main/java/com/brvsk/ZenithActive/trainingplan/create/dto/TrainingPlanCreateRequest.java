@@ -12,6 +12,7 @@ public class TrainingPlanCreateRequest {
 
     private UUID memberId;
     private UUID instructorId;
+    private UUID trainingPlanRequestId;
     private List<TrainingDayCreateRequest> trainingDays;
 
 }

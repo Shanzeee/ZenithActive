@@ -1,6 +1,7 @@
 package com.brvsk.ZenithActive.user;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.util.UUID;
@@ -19,6 +20,8 @@ public class User {
     private UUID userId;
     private String firstName;
     private String lastName;
+    @Email
+    private String email;
     @Enumerated
     private Gender gender;
 

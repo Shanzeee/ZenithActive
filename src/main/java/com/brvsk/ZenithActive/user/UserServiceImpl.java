@@ -32,6 +32,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {
+        if (userRepository.existsByEmail(userRequest.getEmail())){
+            throw new EmailAlreadyExistsException(userRequest.getEmail());
+        }
+
         User newUser = toEntity(userRequest);
         userRepository.save(newUser);
 
@@ -49,6 +53,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .gender(userRequest.getGender())
+                .email(userRequest.getEmail())
                 .build();
     }
 }

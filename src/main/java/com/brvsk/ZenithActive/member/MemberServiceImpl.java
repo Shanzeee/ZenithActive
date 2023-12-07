@@ -2,7 +2,9 @@ package com.brvsk.ZenithActive.member;
 
 import com.brvsk.ZenithActive.course.CourseMapper;
 import com.brvsk.ZenithActive.course.CourseResponse;
+import com.brvsk.ZenithActive.user.EmailAlreadyExistsException;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,15 @@ public class MemberServiceImpl implements MemberService{
 
     private final MemberRepository memberRepository;
     private final CourseMapper courseMapper;
+    private final UserRepository userRepository;
 
     @Override
     public void createMember(MemberCreateRequest request){
-        Member member = toEntity(request);
+        if (userRepository.existsByEmail(request.getEmail())){
+            throw new EmailAlreadyExistsException(request.getEmail());
+        }
 
+        Member member = toEntity(request);
         memberRepository.save(member);
     }
 

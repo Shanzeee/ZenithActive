@@ -1,9 +1,9 @@
 package com.brvsk.ZenithActive.trainingplan.create;
 
-import com.brvsk.ZenithActive.instructor.Instructor;
-import com.brvsk.ZenithActive.instructor.InstructorRepository;
-import com.brvsk.ZenithActive.member.Member;
-import com.brvsk.ZenithActive.member.MemberRepository;
+import com.brvsk.ZenithActive.user.instructor.Instructor;
+import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
+import com.brvsk.ZenithActive.user.member.Member;
+import com.brvsk.ZenithActive.user.member.MemberRepository;
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.pdf.PdfTrainingPlanGenerator;
 import com.brvsk.ZenithActive.trainingplan.create.dto.ExerciseCreateRequest;

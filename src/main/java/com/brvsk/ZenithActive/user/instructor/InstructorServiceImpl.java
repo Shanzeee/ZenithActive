@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.instructor;
+package com.brvsk.ZenithActive.user.instructor;
 
 import com.brvsk.ZenithActive.user.User;
 import com.brvsk.ZenithActive.user.UserNotFoundException;

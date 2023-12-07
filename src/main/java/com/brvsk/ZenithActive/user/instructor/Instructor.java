@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.instructor;
+package com.brvsk.ZenithActive.user.instructor;
 
 import com.brvsk.ZenithActive.course.Course;
 import com.brvsk.ZenithActive.review.Review;

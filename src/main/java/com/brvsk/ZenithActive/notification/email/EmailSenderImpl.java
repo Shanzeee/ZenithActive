@@ -1,8 +1,8 @@
 package com.brvsk.ZenithActive.notification.email;
 
 import com.brvsk.ZenithActive.course.Course;
-import com.brvsk.ZenithActive.instructor.Instructor;
-import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.user.instructor.Instructor;
+import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.notification.newsletter.NewsletterSubscriber;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

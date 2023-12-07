@@ -1,8 +1,8 @@
 package com.brvsk.ZenithActive.review;
 
 import com.brvsk.ZenithActive.course.Course;
-import com.brvsk.ZenithActive.instructor.Instructor;
-import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.user.instructor.Instructor;
+import com.brvsk.ZenithActive.user.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

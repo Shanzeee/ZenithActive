@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.member;
+package com.brvsk.ZenithActive.user.member;
 
 import org.springframework.stereotype.Component;
 

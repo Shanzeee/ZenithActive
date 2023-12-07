@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.course;
 
-import com.brvsk.ZenithActive.member.MemberResponse;
+import com.brvsk.ZenithActive.user.member.MemberResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

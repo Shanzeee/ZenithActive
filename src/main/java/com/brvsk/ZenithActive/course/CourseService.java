@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.course;
 
-import com.brvsk.ZenithActive.member.MemberResponse;
+import com.brvsk.ZenithActive.user.member.MemberResponse;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

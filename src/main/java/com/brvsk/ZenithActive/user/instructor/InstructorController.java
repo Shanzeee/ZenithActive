@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.instructor;
+package com.brvsk.ZenithActive.user.instructor;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

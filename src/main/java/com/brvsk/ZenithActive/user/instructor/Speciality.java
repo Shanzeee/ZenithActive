@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.instructor;
+package com.brvsk.ZenithActive.user.instructor;
 
 public enum Speciality {
     YOGA,

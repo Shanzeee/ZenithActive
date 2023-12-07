@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.instructor;
+package com.brvsk.ZenithActive.user.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface InstructorRepository extends JpaRepository<Instructor, UUID> {
+public interface MemberRepository extends JpaRepository<Member, UUID> {
 }

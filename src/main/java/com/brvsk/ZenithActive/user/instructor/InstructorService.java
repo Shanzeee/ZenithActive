@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.instructor;
+package com.brvsk.ZenithActive.user.instructor;
 
 import org.springframework.transaction.annotation.Transactional;
 

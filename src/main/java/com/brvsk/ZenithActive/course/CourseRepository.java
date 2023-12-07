@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.course;
 
 import com.brvsk.ZenithActive.facility.Facility;
-import com.brvsk.ZenithActive.instructor.Instructor;
+import com.brvsk.ZenithActive.user.instructor.Instructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.trainingplan.request;
 
-import com.brvsk.ZenithActive.member.Member;
-import com.brvsk.ZenithActive.member.MemberRepository;
+import com.brvsk.ZenithActive.user.member.Member;
+import com.brvsk.ZenithActive.user.member.MemberRepository;
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestCreateCommand;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestMapper;

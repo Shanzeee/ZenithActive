@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.trainingplan.create.entity;
 
-import com.brvsk.ZenithActive.instructor.Instructor;
-import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.user.instructor.Instructor;
+import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
 import lombok.*;
 

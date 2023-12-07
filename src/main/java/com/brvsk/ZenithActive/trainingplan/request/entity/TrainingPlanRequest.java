@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.trainingplan.request.entity;
 
-import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.user.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

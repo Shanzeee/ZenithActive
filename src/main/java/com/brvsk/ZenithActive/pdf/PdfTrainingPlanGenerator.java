@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.pdf;
 
-import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.trainingplan.create.entity.Exercise;
 import com.brvsk.ZenithActive.trainingplan.create.entity.ExerciseType;
 import com.brvsk.ZenithActive.trainingplan.create.entity.TrainingDay;

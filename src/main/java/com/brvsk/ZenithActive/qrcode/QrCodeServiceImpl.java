@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.qrcode;
 
-import com.brvsk.ZenithActive.member.Member;
-import com.brvsk.ZenithActive.member.MemberRepository;
+import com.brvsk.ZenithActive.user.member.Member;
+import com.brvsk.ZenithActive.user.member.MemberRepository;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;

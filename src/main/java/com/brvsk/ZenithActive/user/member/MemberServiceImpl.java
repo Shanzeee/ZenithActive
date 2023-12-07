@@ -53,6 +53,7 @@ public class MemberServiceImpl implements MemberService{
         member.setGender(request.getGender());
         member.setHeight(request.getHeight());
         member.setWeight(request.getWeight());
+        member.setEmail(request.getEmail());
         return member;
     }
 

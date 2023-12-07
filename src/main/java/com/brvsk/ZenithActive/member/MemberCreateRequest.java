@@ -16,4 +16,6 @@ public class MemberCreateRequest {
 
     private Integer height;
     private Integer weight;
+
+    private boolean emailNewsletter;
 }

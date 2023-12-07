@@ -1,14 +1,20 @@
 package com.brvsk.ZenithActive.notification.email;
 
 import com.brvsk.ZenithActive.course.Course;
-import com.brvsk.ZenithActive.course.CourseRepository;
 import com.brvsk.ZenithActive.instructor.Instructor;
 import com.brvsk.ZenithActive.member.Member;
+import com.brvsk.ZenithActive.notification.newsletter.NewsletterSubscriber;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +66,44 @@ public class EmailSenderImpl implements EmailSender{
                 + "Best regards,\nZenith Active ;)");
 
         javaMailSender.send(message);
+    }
+
+    @Override
+    public void sendWeeklyNewsletter(NewsletterSubscriber subscriber, List<String> newsletterContents) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(subscriber.getEmail());
+        message.setSubject("Weekly Newsletter");
+        message.setText("Dear " + subscriber.getFirstName() + ",\n\n"
+                + "Here is your weekly newsletter:\n\n"
+                + String.join("\n", newsletterContents) + "\n\n"
+                + "Best regards,\nZenith Active");
+
+        javaMailSender.send(message);
+    }
+
+    @Override
+    public void sendNewsletterConfirmationEmail(String firstName, String email) {
+        String confirmationLink = buildConfirmationLink(email);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(email);
+        message.setSubject("Newsletter Subscription Confirmation");
+        message.setText("Dear " + firstName + ",\n\n"
+                + "Thank you for subscribing to our newsletter. You will receive weekly updates and exciting news!\n\n"
+                + "Please confirm your subscription by clicking the following link:\n" + confirmationLink + "\n\n"
+                + "Best regards,\nZenith Active");
+
+        javaMailSender.send(message);
+    }
+
+    private String buildConfirmationLink(String email) {
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        String scheme = request.getScheme();
+        String host = request.getHeader("Host");
+
+        return scheme + "://" + host + "/api/v1/newsletter/confirm/" + email;
     }
 
 }

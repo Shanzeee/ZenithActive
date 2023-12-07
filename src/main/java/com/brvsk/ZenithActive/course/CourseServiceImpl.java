@@ -9,6 +9,7 @@ import com.brvsk.ZenithActive.member.Member;
 import com.brvsk.ZenithActive.member.MemberMapper;
 import com.brvsk.ZenithActive.member.MemberRepository;
 import com.brvsk.ZenithActive.member.MemberResponse;
+import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class CourseServiceImpl implements CourseService{
     private final CourseMapper courseMapper;
     private final MemberRepository memberRepository;
     private final MemberMapper memberMapper;
+    private final EmailSender emailSender;
 
     @Override
     public void createNewCourse(CourseCreateRequest request){
@@ -87,6 +89,8 @@ public class CourseServiceImpl implements CourseService{
 
         courseRepository.save(course);
         memberRepository.save(member);
+
+        emailSender.sendEnrollmentConfirmation(member, course);
     }
 
     @Override

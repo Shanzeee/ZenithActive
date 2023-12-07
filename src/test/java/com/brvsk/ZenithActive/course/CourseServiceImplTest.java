@@ -10,6 +10,7 @@ import com.brvsk.ZenithActive.member.Member;
 import com.brvsk.ZenithActive.member.MemberMapper;
 import com.brvsk.ZenithActive.member.MemberRepository;
 import com.brvsk.ZenithActive.member.MemberResponse;
+import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.user.Gender;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,11 +45,13 @@ class CourseServiceImplTest {
     private MemberRepository memberRepository;
     @Mock
     private MemberMapper memberMapper;
+    @Mock
+    private EmailSender emailSender;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        courseServiceImpl = new CourseServiceImpl(courseRepository, instructorRepository, facilityRepository, courseMapper, memberRepository, memberMapper) {
+        courseServiceImpl = new CourseServiceImpl(courseRepository, instructorRepository, facilityRepository, courseMapper, memberRepository, memberMapper, emailSender) {
         };
     }
 
@@ -66,15 +69,14 @@ class CourseServiceImplTest {
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Facility.class)))
-                .thenReturn(List.of()); // assuming no overlapping courses
+                .thenReturn(List.of());
 
-        // Mock findOverlappingInstructorCourses as well
         when(courseRepository.findOverlappingInstructorCourses(
                 ArgumentMatchers.any(DayOfWeek.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Instructor.class)))
-                .thenReturn(List.of()); // assuming no overlapping instructor courses
+                .thenReturn(List.of());
 
         // When
         assertDoesNotThrow(() -> courseServiceImpl.createNewCourse(request));
@@ -93,7 +95,6 @@ class CourseServiceImplTest {
         when(instructorRepository.findById(request.getInstructorId())).thenReturn(Optional.of(instructor));
         when(facilityRepository.findById(request.getFacilityId())).thenReturn(Optional.of(facility));
 
-        // Mock that there are overlapping courses
         when(courseRepository.findOverlappingCourses(
                 ArgumentMatchers.any(DayOfWeek.class),
                 ArgumentMatchers.any(LocalTime.class),
@@ -104,7 +105,6 @@ class CourseServiceImplTest {
         // When, Then
         assertThrows(IllegalArgumentException.class, () -> courseServiceImpl.createNewCourse(request));
 
-        // Verify that findOverlappingCourses was invoked
         verify(courseRepository, times(1)).findOverlappingCourses(
                 ArgumentMatchers.any(DayOfWeek.class),
                 ArgumentMatchers.any(LocalTime.class),
@@ -122,7 +122,6 @@ class CourseServiceImplTest {
         when(instructorRepository.findById(request.getInstructorId())).thenReturn(Optional.of(instructor));
         when(facilityRepository.findById(request.getFacilityId())).thenReturn(Optional.of(facility));
 
-        // Mock that there are overlapping instructor courses
         when(courseRepository.findOverlappingInstructorCourses(
                 ArgumentMatchers.any(DayOfWeek.class),
                 ArgumentMatchers.any(LocalTime.class),
@@ -133,7 +132,6 @@ class CourseServiceImplTest {
         // When, Then
         assertThrows(IllegalArgumentException.class, () -> courseServiceImpl.createNewCourse(request));
 
-        // Verify that findOverlappingInstructorCourses was invoked
         verify(courseRepository, times(1)).findOverlappingInstructorCourses(
                 ArgumentMatchers.any(DayOfWeek.class),
                 ArgumentMatchers.any(LocalTime.class),

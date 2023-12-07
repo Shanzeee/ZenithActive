@@ -30,8 +30,8 @@ class UserServiceImplTest {
     void itShouldGetAllUsers() {
         // Given
         when(userRepository.findAll()).thenReturn(Arrays.asList(
-                new User(UUID.randomUUID(), "John", "Doe", Gender.MALE),
-                new User(UUID.randomUUID(), "Jane", "Doe", Gender.FEMALE)
+                new User(UUID.randomUUID(), "John", "Doe", "kacpersjusz@gmail.com", Gender.MALE),
+                new User(UUID.randomUUID(), "Jane", "Doe","kacpersjuszb@gmail.com", Gender.FEMALE)
         ));
 
         when(userMapper.mapToResponse(any())).thenReturn(new UserResponse());
@@ -46,7 +46,7 @@ class UserServiceImplTest {
     void itShouldGetUserById() {
         // Given
         UUID userId = UUID.randomUUID();
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User(userId, "John", "Doe", Gender.MALE)));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new User(userId, "John", "Doe", "kacpersjuszb@gmail.com", Gender.MALE)));
         when(userMapper.mapToResponse(any())).thenReturn(new UserResponse());
         // When
         UserResponse result = userService.getUserById(userId);
@@ -69,7 +69,7 @@ class UserServiceImplTest {
     @Test
     void itShouldCreateUser() {
         // Given
-        UserRequest userRequest = new UserRequest("John", "Doe", Gender.MALE);
+        UserRequest userRequest = new UserRequest("John", "Doe",  Gender.MALE, "kacpersjuszb@gmail.com");
         when(userMapper.mapToResponse(any())).thenReturn(new UserResponse());
         // When
         UserResponse result = userService.createUser(userRequest);

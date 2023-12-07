@@ -12,7 +12,10 @@ public class MemberCreateRequest {
     private String firstName;
     private String lastName;
     private Gender gender;
+    private String email;
 
     private Integer height;
     private Integer weight;
+
+    private boolean emailNewsletter;
 }

@@ -4,6 +4,7 @@ import com.brvsk.ZenithActive.instructor.Instructor;
 import com.brvsk.ZenithActive.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.member.Member;
 import com.brvsk.ZenithActive.member.MemberRepository;
+import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.pdf.PdfTrainingPlanGenerator;
 import com.brvsk.ZenithActive.trainingplan.create.dto.ExerciseCreateRequest;
 import com.brvsk.ZenithActive.trainingplan.create.dto.TrainingDayCreateRequest;
@@ -28,6 +29,7 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
     private final MemberRepository memberRepository;
     private final InstructorRepository instructorRepository;
     private final TrainingPlanRequestRepository trainingPlanRequestRepository;
+    private final EmailSender emailSender;
 
     @Override
     public void createTrainingPlan(TrainingPlanCreateRequest request) {
@@ -56,6 +58,8 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
 
         trainingPlanRequest.setCreated(true);
         trainingPlanRequestRepository.save(trainingPlanRequest);
+
+        emailSender.sendTrainingPlanConfirmation(member,instructor);
     }
 
 

@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.user;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,4 +18,6 @@ public class UserRequest {
     private String lastName;
     @NotNull
     private Gender gender;
+    @Email
+    private String email;
 }

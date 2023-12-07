@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.trainingplan.request;
 
 import com.brvsk.ZenithActive.member.Member;
 import com.brvsk.ZenithActive.member.MemberRepository;
+import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestCreateCommand;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestMapper;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestResponse;
@@ -23,6 +24,7 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
     private final TrainingPlanRequestRepository trainingPlanRequestRepository;
     private final MemberRepository memberRepository;
     private final TrainingPlanRequestMapper trainingPlanRequestMapper;
+    private final EmailSender emailSender;
 
     @Override
     public void createTrainingPlanRequest(TrainingPlanRequestCreateCommand command) {
@@ -37,6 +39,8 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
                 .build();
 
         trainingPlanRequestRepository.save(trainingPlanRequest);
+
+        emailSender.sendTrainingPlanRequestConfirmation(member);
     }
 
     @Override

@@ -1,4 +1,15 @@
+version: '3.8'
 services:
+  app:
+    container_name: ZenithActive
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    networks:
+      - spring
+    depends_on:
+      - postgres
   postgres:
     container_name: postgres
     image: postgres

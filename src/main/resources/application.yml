@@ -40,3 +40,10 @@ twilio:
   account_sid: ACb07cd348a3b2806d3775c7d9fc1782cb
   auth_token: ${AUTH_TOKEN}
   trial_number: ${TRIAL_NUMBER}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          -prometheus

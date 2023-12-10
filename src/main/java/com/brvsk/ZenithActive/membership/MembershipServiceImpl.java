@@ -16,7 +16,7 @@ public class MembershipServiceImpl implements MembershipService{
     private final MemberRepository memberRepository;
 
     @Override
-    public void addNewMembershipToMember(MembershipRequest request){
+    public Membership addNewMembershipToMember(MembershipRequest request){
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new UserNotFoundException(request.getMemberId()));
 
@@ -26,6 +26,9 @@ public class MembershipServiceImpl implements MembershipService{
 
         member.setMembership(membership);
         memberRepository.save(member);
+
+
+        return membership;
     }
 
 

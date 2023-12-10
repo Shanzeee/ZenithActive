@@ -1,5 +1,7 @@
 package com.brvsk.ZenithActive.course;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -14,22 +16,33 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 public class CourseCreateRequest {
-    @NotNull
+
+    @NotNull(message = "Course type cannot be null")
     private CourseType courseType;
-    @NotBlank
+
+    @NotBlank(message = "Name cannot be blank")
     private String name;
-    @NotBlank
+
+    @NotBlank(message = "Description cannot be blank")
     private String description;
-    @NotNull
+
+    @NotNull(message = "Group size cannot be null")
+    @Min(value = 0, message = "Group size cannot be negative")
+    @Max(value = 100, message = "Group size cannot be greater than 50")
     private Integer groupSize;
-    @NotNull
+
+    @NotNull(message = "Day of week cannot be null")
     private DayOfWeek dayOfWeek;
-    @NotNull
+
+    @NotNull(message = "Start time cannot be null")
     private LocalTime startTime;
-    @NotNull
+
+    @NotNull(message = "End time cannot be null")
     private LocalTime endTime;
-    @NotNull
+
+    @NotNull(message = "Facility ID cannot be null")
     private UUID facilityId;
-    @NotNull
+
+    @NotNull(message = "Instructor ID cannot be null")
     private UUID instructorId;
 }

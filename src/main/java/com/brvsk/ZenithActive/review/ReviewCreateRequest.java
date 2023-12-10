@@ -1,31 +1,35 @@
 package com.brvsk.ZenithActive.review;
 
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
 @Builder
 public class ReviewCreateRequest {
-    @NotNull
+
+    @NotNull(message = "Member ID cannot be null")
     private UUID memberId;
 
-    @NotNull
+    @NotNull(message = "Course ID cannot be null")
     private UUID courseId;
-    @NotNull
+
+    @NotNull(message = "Course rating cannot be null")
     private Rating courseRating;
-    @NotBlank
+
+    @Min(value = 10, message = "Course comment must be at least 10 characters")
+    @Max(value = 500, message = "Course comment cannot be more than 500 characters")
     private String courseComment;
 
-    @NotNull
+    @NotNull(message = "Instructor rating cannot be null")
     private Rating instructorRating;
-    @NotBlank
-    private String instructorComment;
 
+    @Min(value = 10, message = "Instructor comment must be at least 10 characters")
+    @Max(value = 500, message = "Instructor comment cannot be more than 500 characters")
+    private String instructorComment;
 }

@@ -3,21 +3,22 @@ package com.brvsk.ZenithActive.user;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 @Builder
 public class UserRequest {
 
-    @NotBlank
+    @NotBlank(message = "First name cannot be blank")
     private String firstName;
-    @NotBlank
+
+    @NotBlank(message = "Last name cannot be blank")
     private String lastName;
-    @NotNull
+
+    @NotNull(message = "Gender cannot be null")
     private Gender gender;
-    @Email
+
+    @Email(message = "Invalid email format")
     private String email;
 }

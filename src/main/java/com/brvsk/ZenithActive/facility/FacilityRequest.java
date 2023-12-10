@@ -14,13 +14,17 @@ import java.util.Map;
 @AllArgsConstructor
 @Builder
 public class FacilityRequest {
-    @NotNull
-    private FacilityType facilityType;
-    @NotBlank
-    private String name;
-    @NotBlank
-    private String description;
-    private Map<DayOfWeek, LocalTime> openingHoursStart;
-    private Map<DayOfWeek, LocalTime> openingHoursEnd;
 
+    @NotNull(message = "Facility type cannot be null")
+    private FacilityType facilityType;
+
+    @NotBlank(message = "Name cannot be blank")
+    private String name;
+
+    @NotBlank(message = "Description cannot be blank")
+    private String description;
+
+    private Map<DayOfWeek, LocalTime> openingHoursStart;
+
+    private Map<DayOfWeek, LocalTime> openingHoursEnd;
 }

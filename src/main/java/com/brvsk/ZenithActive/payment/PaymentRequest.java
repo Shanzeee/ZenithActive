@@ -15,4 +15,5 @@ public class PaymentRequest {
     private String fullName;
     private ProductType productType;
     private UUID productId;
+    private String email;
 }

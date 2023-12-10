@@ -98,6 +98,20 @@ public class EmailSenderImpl implements EmailSender{
         javaMailSender.send(message);
     }
 
+    @Override
+    public void sendPurchaseConfirmedEmail(String fullName, String email, String purchaseNumber) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(email);
+        message.setSubject("Newsletter Subscription Confirmation");
+        message.setText("Dear " + fullName + ",\n\n"
+                + "Thank you for your purchase\n"
+                + "It is your purchase number: " + purchaseNumber + "\n\n"
+                + "Best regards,\nZenith Active");
+
+        javaMailSender.send(message);
+    }
+
     private String buildConfirmationLink(String email) {
         HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
         String scheme = request.getScheme();

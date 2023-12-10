@@ -17,6 +17,8 @@ public class PaymentServiceImpl implements PaymentService{
     public void crateNewPayment(PaymentRequest request){
         Payment payment = toEntity(request);
         paymentRepository.save(payment);
+
+        emailSender.sendPurchaseConfirmedEmail(request.getFullName(), request.getEmail(), payment.getPaymentNumber());
     }
 
     private Payment toEntity(PaymentRequest request) {

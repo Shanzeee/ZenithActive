@@ -14,4 +14,5 @@ public interface EmailSender {
     void sendTrainingPlanConfirmation(Member member, Instructor instructor);
     void sendWeeklyNewsletter(NewsletterSubscriber newsletterSubscriber, List<String> newsletterContents);
     void sendNewsletterConfirmationEmail(String firstName, String email);
+    void sendPurchaseConfirmedEmail(String firstName, String email, String purchaseNumber);
 }

@@ -1,6 +1,7 @@
 package com.brvsk.ZenithActive.user.member;
 
 import com.brvsk.ZenithActive.course.Course;
+import com.brvsk.ZenithActive.membership.Membership;
 import com.brvsk.ZenithActive.review.Review;
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
 import com.brvsk.ZenithActive.user.User;
@@ -22,6 +23,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class Member extends User {
 
+    @OneToOne
+    private Membership membership;
     private Integer height;
     private Integer weight;
 

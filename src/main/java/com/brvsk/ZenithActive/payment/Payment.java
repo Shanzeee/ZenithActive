@@ -7,8 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity(name = "Membership")
-@Table(name = "membership")
+@Entity(name = "Payment")
+@Table(name = "payment")
 @Getter
 @Setter
 @Builder

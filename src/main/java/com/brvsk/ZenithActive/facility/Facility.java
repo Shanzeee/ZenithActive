@@ -20,20 +20,31 @@ public class Facility {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    @Enumerated
+    @Column(nullable = false)
     private FacilityType facilityType;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, length = 1000)
     private String description;
 
     @ElementCollection
-    @CollectionTable(name = "facility_opening_hours_start", joinColumns = @JoinColumn(name = "facilities_id"))
-    @MapKeyColumn(name = "day_of_week")
-    @Column(name = "opening_hours_start")
+    @CollectionTable(
+            name = "facility_opening_hours_start",
+            joinColumns = @JoinColumn(name = "facilities_id"))
+    @MapKeyColumn(name = "day_of_week", nullable = false)
+    @Column(name = "opening_hours_start", nullable = false)
     private Map<DayOfWeek, LocalTime> openingHoursStart;
 
     @ElementCollection
-    @CollectionTable(name = "facility_opening_hours_end", joinColumns = @JoinColumn(name = "facilities_id"))
-    @MapKeyColumn(name = "day_of_week")
-    @Column(name = "opening_hours_end")
+    @CollectionTable(
+            name = "facility_opening_hours_end",
+            joinColumns = @JoinColumn(name = "facilities_id"))
+    @MapKeyColumn(name = "day_of_week", nullable = false)
+    @Column(name = "opening_hours_end", nullable = false)
     private Map<DayOfWeek, LocalTime> openingHoursEnd;
 
     @Override

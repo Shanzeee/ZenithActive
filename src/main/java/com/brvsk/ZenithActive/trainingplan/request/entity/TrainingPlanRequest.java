@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity(name = "TrainingPlanRequest")
@@ -22,10 +22,14 @@ public class TrainingPlanRequest {
     private UUID id;
 
     private boolean created;
+
     @ManyToOne
+    @JoinColumn(name = "member_id")
     private Member member;
+
     @Embedded
     private TrainingPlanRequestMemberInfo memberInfo;
+
     @CreationTimestamp
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }

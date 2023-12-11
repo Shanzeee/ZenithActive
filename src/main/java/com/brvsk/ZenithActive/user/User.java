@@ -18,11 +18,14 @@ public class User {
 
     @Id
     private UUID userId;
+
     private String firstName;
+
     private String lastName;
-    @Email
+
     private String email;
-    @Enumerated
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
 }

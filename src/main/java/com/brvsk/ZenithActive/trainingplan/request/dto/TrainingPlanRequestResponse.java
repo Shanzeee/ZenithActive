@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Builder
@@ -17,6 +17,6 @@ public class TrainingPlanRequestResponse {
     private UUID id;
     private UUID memberId;
     private String memberName;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private TrainingPlanTarget trainingPlanTarget;
 }

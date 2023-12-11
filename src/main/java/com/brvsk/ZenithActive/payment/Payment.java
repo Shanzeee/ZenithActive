@@ -19,13 +19,20 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     private String paymentNumber;
+
+    @Column(nullable = false)
     private Double value;
+
+    @Enumerated(EnumType.STRING)
     private DiscountType discountType;
 
+    @Enumerated(EnumType.STRING)
     private ProductType productType;
+
     private UUID productId;
 
     @CreationTimestamp
-    private LocalDateTime cratedAt;
+    private LocalDateTime createdAt;
 }

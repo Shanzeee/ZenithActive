@@ -34,14 +34,18 @@ public class Member extends User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
     private Set<Course> enrolledCourses = new HashSet<>();
+
     @OneToMany(mappedBy = "member")
     private Set<Review> reviews = new HashSet<>();
+
     @OneToMany(mappedBy = "member")
     private List<TrainingPlanRequest> trainingPlanRequestList = new ArrayList<>();
+
     @ElementCollection
     @CollectionTable(name = "training_plan_paths", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "path")
     private Set<String> trainingPlanPaths = new HashSet<>();
+
     @Column(length = 1000)
     private String qrCode;
 }

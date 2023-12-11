@@ -19,8 +19,13 @@ public class NewsletterSubscriber {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @Column(nullable = false)
     private String firstName;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column(nullable = false)
     private boolean confirmed;
 
 }

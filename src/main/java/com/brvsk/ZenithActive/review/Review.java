@@ -24,18 +24,29 @@ public class Review {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private Instructor instructor;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Rating instructorRating;
+
+    @Column(length = 500)
     private String instructorComment;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Rating courseRating;
+
+    @Column(length = 500)
     private String courseComment;
 
     @CreationTimestamp

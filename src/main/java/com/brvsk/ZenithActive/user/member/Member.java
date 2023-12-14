@@ -1,6 +1,7 @@
 package com.brvsk.ZenithActive.user.member;
 
 import com.brvsk.ZenithActive.course.Course;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPoints;
 import com.brvsk.ZenithActive.membership.Membership;
 import com.brvsk.ZenithActive.review.Review;
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
@@ -48,4 +49,9 @@ public class Member extends User {
 
     @Column(length = 1000)
     private String qrCode;
+
+    @OneToMany(mappedBy = "member")
+    private Set<LoyaltyPoints> loyaltyPoints = new HashSet<>();
+
+
 }

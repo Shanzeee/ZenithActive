@@ -6,6 +6,7 @@ import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.notification.newsletter.NewsletterSubscriber;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -18,6 +19,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EmailSenderImpl implements EmailSender{
 
     private final JavaMailSender javaMailSender;
@@ -36,6 +38,8 @@ public class EmailSenderImpl implements EmailSender{
                 + "Best regards,\nZenith Active ;)");
 
         javaMailSender.send(message);
+
+        log.info("Enrollment confirmation email sent to: {}", member.getEmail());
     }
 
     @Override
@@ -51,6 +55,9 @@ public class EmailSenderImpl implements EmailSender{
                 + "Best regards,\nZenith Active ;)");
 
         javaMailSender.send(message);
+
+        log.info("Training plan request confirmation email sent to: {}", member.getEmail());
+
     }
 
     @Override
@@ -66,6 +73,8 @@ public class EmailSenderImpl implements EmailSender{
                 + "Best regards,\nZenith Active ;)");
 
         javaMailSender.send(message);
+
+        log.info("Training plan confirmation email sent to: {}", member.getEmail());
     }
 
     @Override
@@ -80,6 +89,8 @@ public class EmailSenderImpl implements EmailSender{
                 + "Best regards,\nZenith Active");
 
         javaMailSender.send(message);
+
+        log.info("Weekly newsletter sent to: {}", subscriber.getEmail());
     }
 
     @Override
@@ -96,6 +107,8 @@ public class EmailSenderImpl implements EmailSender{
                 + "Best regards,\nZenith Active");
 
         javaMailSender.send(message);
+
+        log.info("Newsletter confirmation email sent to: {}", email);
     }
 
     @Override
@@ -110,6 +123,25 @@ public class EmailSenderImpl implements EmailSender{
                 + "Best regards,\nZenith Active");
 
         javaMailSender.send(message);
+
+        log.info("Purchase confirmation email sent to: {}", email);
+    }
+
+    @Override
+    public void sendLoyaltyPointsThresholdEmail(String firstName, String email) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(email);
+        message.setSubject("Congratulations on Reaching 1000 Loyalty Points!");
+        message.setText("Dear " + firstName + ",\n\n"
+                + "Congratulations! You have reached 1000 loyalty points. Thank you for your loyalty and dedication.\n\n"
+                + "Keep up the good work!\n\n"
+                + "Now you can exchange your LP for amazing prizes :D \n\n"
+                + "Best regards,\nZenith Active");
+
+        javaMailSender.send(message);
+
+        log.info("Loyalty points threshold email sent to: {}", email);
     }
 
     private String buildConfirmationLink(String email) {

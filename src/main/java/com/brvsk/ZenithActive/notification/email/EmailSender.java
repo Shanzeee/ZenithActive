@@ -15,4 +15,5 @@ public interface EmailSender {
     void sendWeeklyNewsletter(NewsletterSubscriber newsletterSubscriber, List<String> newsletterContents);
     void sendNewsletterConfirmationEmail(String firstName, String email);
     void sendPurchaseConfirmedEmail(String firstName, String email, String purchaseNumber);
+    void sendLoyaltyPointsThresholdEmail(String firstName, String email);
 }

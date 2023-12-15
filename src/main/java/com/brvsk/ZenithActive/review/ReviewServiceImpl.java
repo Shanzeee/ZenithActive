@@ -3,6 +3,9 @@ package com.brvsk.ZenithActive.review;
 import com.brvsk.ZenithActive.course.Course;
 import com.brvsk.ZenithActive.course.CourseNotFoundException;
 import com.brvsk.ZenithActive.course.CourseRepository;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPointsCreateRequest;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPointsType;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.user.member.Member;
@@ -28,6 +31,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final MemberRepository memberRepository;
     private final CourseRepository courseRepository;
     private final ReviewMapper reviewMapper;
+    private final LoyaltyPointsService loyaltyPointsService;
 
     @Transactional
     @Override
@@ -49,6 +53,10 @@ public class ReviewServiceImpl implements ReviewService{
         memberRepository.save(member);
         instructorRepository.save(instructor);
         courseRepository.save(course);
+
+        LoyaltyPointsCreateRequest loyaltyPointsCreateRequest = buildLoyaltyPointsCreateRequest(request.getMemberId());
+        loyaltyPointsService.addLoyaltyPoints(loyaltyPointsCreateRequest);
+
     }
 
     @Override
@@ -116,6 +124,15 @@ public class ReviewServiceImpl implements ReviewService{
                 .instructorComment(request.getInstructorComment())
                 .courseRating(request.getCourseRating())
                 .courseComment(request.getCourseComment())
+                .build();
+    }
+
+    private LoyaltyPointsCreateRequest buildLoyaltyPointsCreateRequest(UUID memberId){
+        return LoyaltyPointsCreateRequest
+                .builder()
+                .loyaltyPointsType(LoyaltyPointsType.REVIEW)
+                .pointsAmount(10)
+                .memberId(memberId)
                 .build();
     }
 }

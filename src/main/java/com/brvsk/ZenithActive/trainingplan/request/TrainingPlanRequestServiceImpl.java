@@ -1,7 +1,8 @@
 package com.brvsk.ZenithActive.trainingplan.request;
 
-import com.brvsk.ZenithActive.user.member.Member;
-import com.brvsk.ZenithActive.user.member.MemberRepository;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPointsCreateRequest;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPointsType;
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestCreateCommand;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestMapper;
@@ -10,6 +11,8 @@ import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestRespon
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
 import com.brvsk.ZenithActive.trainingplan.request.exception.TrainingPlanRequestNotFoundException;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.user.member.Member;
+import com.brvsk.ZenithActive.user.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
     private final MemberRepository memberRepository;
     private final TrainingPlanRequestMapper trainingPlanRequestMapper;
     private final EmailSender emailSender;
+    private final LoyaltyPointsService loyaltyPointsService;
 
     @Override
     public void createTrainingPlanRequest(TrainingPlanRequestCreateCommand command) {
@@ -39,6 +43,9 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
                 .build();
 
         trainingPlanRequestRepository.save(trainingPlanRequest);
+
+        LoyaltyPointsCreateRequest loyaltyPointsCreateRequest = buildLoyaltyPointsCreateRequest(command.getMemberId());
+        loyaltyPointsService.addLoyaltyPoints(loyaltyPointsCreateRequest);
 
         emailSender.sendTrainingPlanRequestConfirmation(member);
     }
@@ -57,5 +64,14 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
                 .findById(id)
                 .map(trainingPlanRequestMapper::toResponseDetailedInfo)
                 .orElseThrow(() -> new TrainingPlanRequestNotFoundException(id));
+    }
+
+    private LoyaltyPointsCreateRequest buildLoyaltyPointsCreateRequest(UUID memberId){
+        return LoyaltyPointsCreateRequest
+                .builder()
+                .loyaltyPointsType(LoyaltyPointsType.MEMBERSHIP)
+                .pointsAmount(300)
+                .memberId(memberId)
+                .build();
     }
 }

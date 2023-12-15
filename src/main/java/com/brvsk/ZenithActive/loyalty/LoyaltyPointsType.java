@@ -6,5 +6,6 @@ public enum LoyaltyPointsType {
     ACTIVITY_AT_THE_COURSE,
     MEMBERSHIP,
     ATTENDANCE_AT_THE_FACILITY,
+    REVIEW
 
 }

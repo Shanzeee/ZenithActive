@@ -9,4 +9,5 @@ public interface MemberService {
     void createMember(MemberCreateRequest request);
 
     Set<CourseResponse> getCoursesForMember(UUID userId);
+    int calculateTotalLoyaltyPoints(Member member);
 }

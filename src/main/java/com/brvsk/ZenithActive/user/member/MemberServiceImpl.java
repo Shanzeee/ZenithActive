@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.user.member;
 
 import com.brvsk.ZenithActive.course.CourseMapper;
 import com.brvsk.ZenithActive.course.CourseResponse;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPoints;
 import com.brvsk.ZenithActive.notification.newsletter.NewsletterService;
 import com.brvsk.ZenithActive.user.EmailAlreadyExistsException;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
@@ -44,6 +45,35 @@ public class MemberServiceImpl implements MemberService{
                 .map(courseMapper::mapToResponse)
                 .collect(Collectors.toSet());
     }
+
+//    @Override
+//    public int calculateTotalLoyaltyPoints(Member member) {
+//        Set<LoyaltyPoints> loyaltyPoints = member.getLoyaltyPoints();
+//            return loyaltyPoints.stream()
+//                    .filter(Objects::nonNull)
+//                    .mapToInt(LoyaltyPoints::getPointsAmount)
+//                    .sum();
+//    }
+
+    @Override
+    public int calculateTotalLoyaltyPoints(Member member) {
+        Set<LoyaltyPoints> loyaltyPoints = member.getLoyaltyPoints();
+        int totalPoints = 0;
+
+        if (loyaltyPoints != null) {
+            for (LoyaltyPoints loyaltyPoint : loyaltyPoints) {
+                if (loyaltyPoint != null) {
+                    Integer pointsAmount = loyaltyPoint.getPointsAmount();
+                    if (pointsAmount != null) {
+                        totalPoints += pointsAmount;
+                    }
+                }
+            }
+        }
+
+        return totalPoints;
+    }
+
 
     private Member toEntity(MemberCreateRequest request){
         Member member = new Member();

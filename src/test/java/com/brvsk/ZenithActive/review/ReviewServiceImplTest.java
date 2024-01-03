@@ -4,13 +4,14 @@ import com.brvsk.ZenithActive.course.Course;
 import com.brvsk.ZenithActive.course.CourseNotFoundException;
 import com.brvsk.ZenithActive.course.CourseRepository;
 import com.brvsk.ZenithActive.course.CourseType;
+import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
+import com.brvsk.ZenithActive.user.Gender;
+import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.user.instructor.Speciality;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
-import com.brvsk.ZenithActive.user.Gender;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -44,6 +45,9 @@ class ReviewServiceImplTest {
 
     @Mock
     private CourseRepository courseRepository;
+
+    @Mock
+    private LoyaltyPointsService loyaltyPointsService;
 
     @BeforeEach
     void setUp() {

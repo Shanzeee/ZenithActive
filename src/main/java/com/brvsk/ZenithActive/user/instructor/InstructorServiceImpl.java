@@ -3,6 +3,9 @@ package com.brvsk.ZenithActive.user.instructor;
 import com.brvsk.ZenithActive.user.User;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.UserRepository;
+import com.brvsk.ZenithActive.user.employee.Employee;
+import com.brvsk.ZenithActive.user.employee.EmployeeRepository;
+import com.brvsk.ZenithActive.user.employee.EmployeeType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,21 +18,22 @@ public class InstructorServiceImpl implements InstructorService{
 
     private final UserRepository userRepository;
     private final InstructorRepository instructorRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     @Transactional
     public void createNewInstructor(InstructorCreateRequest request){
-        var userId = request.getUserId();
-        User user = userRepository.findById(userId)
+        UUID userId = request.getUserId();
+        Employee employee = employeeRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
-        if (user instanceof Instructor) {
-            throw new IllegalArgumentException("user with id: "+userId+" is already an instructor");
+        if (employee instanceof Instructor) {
+            throw new IllegalArgumentException("employee with id: "+userId+" is already an instructor");
         }
 
-        Instructor instructor = toInstructor(user,request);
+        Instructor instructor = toInstructor(employee,request);
 
-        userRepository.delete(user);
+        employeeRepository.delete(employee);
         instructorRepository.save(instructor);
     }
 
@@ -44,12 +48,15 @@ public class InstructorServiceImpl implements InstructorService{
         userRepository.save(user);
     }
 
-    private Instructor toInstructor(User user, InstructorCreateRequest request){
+    private Instructor toInstructor(Employee employee, InstructorCreateRequest request){
         Instructor instructor = new Instructor();
         instructor.setUserId(request.getUserId());
-        instructor.setFirstName(user.getFirstName());
-        instructor.setLastName(user.getLastName());
-        instructor.setGender(user.getGender());
+        instructor.setFirstName(employee.getFirstName());
+        instructor.setLastName(employee.getLastName());
+        instructor.setGender(employee.getGender());
+        instructor.setEmployeeType(EmployeeType.INSTRUCTOR);
+        instructor.setAdditionalInformation(employee.getAdditionalInformation());
+        instructor.setHireDate(employee.getHireDate());
         instructor.setDescription(request.getDescription());
         instructor.setSpecialities(request.getSpecialities());
         return instructor;

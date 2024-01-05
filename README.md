@@ -113,6 +113,8 @@ This command will stop and remove the running containers.
 - Customize environment variables and configurations in the docker-compose.yml file as needed.
 - You can modify the Dockerfile and other configuration files based on your application's requirements.
 
+## Database schema:
+![Database schema](data/assets/database_schema.png)
 ## API Documentation
 
 Application exposes a robust API with over 40 endpoints to cater to various functionalities. For detailed information on each endpoint, you can explore the API documentation using Swagger UI. After launching the application, visit http://localhost:8080/swagger-ui/index.html#/ to interactively explore and understand the available endpoints, request parameters, and response structures.

@@ -2,7 +2,7 @@ package com.brvsk.ZenithActive.user.instructor;
 
 import com.brvsk.ZenithActive.course.Course;
 import com.brvsk.ZenithActive.review.Review;
-import com.brvsk.ZenithActive.user.User;
+import com.brvsk.ZenithActive.user.employee.Employee;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
@@ -22,7 +22,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Instructor extends User {
+public class Instructor extends Employee {
 
     @Column(length = 1000)
     private String description;

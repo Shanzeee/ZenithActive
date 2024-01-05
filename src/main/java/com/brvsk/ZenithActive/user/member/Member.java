@@ -53,5 +53,4 @@ public class Member extends User {
     @OneToMany(mappedBy = "member")
     private Set<LoyaltyPoints> loyaltyPoints = new HashSet<>();
 
-
 }

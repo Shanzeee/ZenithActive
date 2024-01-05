@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.workschedule;
 
+import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.employee.Employee;
 import com.brvsk.ZenithActive.user.employee.EmployeeRepository;
@@ -18,6 +19,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService{
     private final WorkScheduleRepository workScheduleRepository;
     private final EmployeeRepository employeeRepository;
     private final WorkScheduleMapper workScheduleMapper;
+    private final EmailSender emailSender;
 
     @Override
     public void addNewWorkSchedule(WorkScheduleCreateRequest request) {
@@ -28,6 +30,7 @@ public class WorkScheduleServiceImpl implements WorkScheduleService{
 
         workScheduleRepository.save(workSchedule);
 
+        emailSender.sendNewWorkScheduleNotification(employee.getEmail(), employee.getFirstName(), request.getYearMonth());
     }
 
     @Override
@@ -73,12 +76,16 @@ public class WorkScheduleServiceImpl implements WorkScheduleService{
 
     @Override
     public void editWorkSchedule(UUID employeeId, YearMonth yearMonth, WorkScheduleEditRequest request) {
-        getEmployeeById(employeeId);
+        validateWorkScheduleEdit(yearMonth);
+
+        Employee employee = getEmployeeById(employeeId);
         WorkSchedule existingWorkSchedule = getWorkScheduleByEmployeeAndYearMonth(employeeId, yearMonth);
 
         existingWorkSchedule.setShifts(request.getWorkShifts());
 
         workScheduleRepository.save(existingWorkSchedule);
+
+        emailSender.sendUpdatedWorkScheduleNotification(employee.getEmail(),employee.getFirstName(),yearMonth);
     }
 
     private int calculateWorkedHoursForWorkSchedule(WorkSchedule workSchedule) {
@@ -109,6 +116,14 @@ public class WorkScheduleServiceImpl implements WorkScheduleService{
         return workSchedules.stream()
                 .map(workScheduleMapper::mapToResponse)
                 .collect(Collectors.toList());
+    }
+
+    private void validateWorkScheduleEdit(YearMonth yearMonth) {
+        YearMonth currentYearMonth = YearMonth.now();
+
+        if (yearMonth.isBefore(currentYearMonth)) {
+            throw new IllegalArgumentException("Cannot edit work schedule for past months.");
+        }
     }
 
 

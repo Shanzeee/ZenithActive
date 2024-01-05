@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.workschedule;
 
+import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.employee.Employee;
 import com.brvsk.ZenithActive.user.employee.EmployeeRepository;
@@ -21,13 +22,12 @@ class WorkScheduleServiceImplTest {
 
     @Mock
     private WorkScheduleRepository workScheduleRepository;
-
     @Mock
     private EmployeeRepository employeeRepository;
-
     @Mock
     private WorkScheduleMapper workScheduleMapper;
-
+    @Mock
+    private EmailSender emailSender;
     @InjectMocks
     private WorkScheduleServiceImpl workScheduleService;
 
@@ -162,7 +162,7 @@ class WorkScheduleServiceImplTest {
     public void editWorkSchedule_Valid() {
         // Given
         UUID employeeId = UUID.randomUUID();
-        YearMonth yearMonth = YearMonth.of(2022, 1);
+        YearMonth yearMonth = YearMonth.now().plusYears(1);
         WorkScheduleEditRequest request = new WorkScheduleEditRequest(Arrays.asList(WorkShift.MORNING, WorkShift.AFTERNOON));
         Employee employee = new Employee();
         WorkSchedule existingWorkSchedule = new WorkSchedule();
@@ -263,7 +263,7 @@ class WorkScheduleServiceImplTest {
     public void editWorkSchedule_EmployeeNotFound() {
         // Given
         UUID employeeId = UUID.randomUUID();
-        YearMonth yearMonth = YearMonth.of(2022, 1);
+        YearMonth yearMonth = YearMonth.now().plusYears(1);
         WorkScheduleEditRequest request = new WorkScheduleEditRequest(Arrays.asList(WorkShift.MORNING, WorkShift.AFTERNOON));
 
         // When
@@ -277,7 +277,7 @@ class WorkScheduleServiceImplTest {
     public void editWorkSchedule_WorkScheduleNotFound() {
         // Given
         UUID employeeId = UUID.randomUUID();
-        YearMonth yearMonth = YearMonth.of(2022, 1);
+        YearMonth yearMonth = YearMonth.now().plusYears(1);
         WorkScheduleEditRequest request = new WorkScheduleEditRequest(Arrays.asList(WorkShift.MORNING, WorkShift.AFTERNOON));
         Employee employee = new Employee();
 
@@ -287,6 +287,48 @@ class WorkScheduleServiceImplTest {
 
         // Then
         assertThrows(WorkScheduleNotFound.class, () -> workScheduleService.editWorkSchedule(employeeId, yearMonth, request));
+    }
+
+    @Test
+    public void editWorkSchedule_PastYearMonth() {
+        // Given
+        UUID employeeId = UUID.randomUUID();
+        YearMonth pastYearMonth = YearMonth.now().minusMonths(1);
+        WorkScheduleEditRequest request = new WorkScheduleEditRequest(Arrays.asList(WorkShift.MORNING, WorkShift.AFTERNOON));
+
+        // When, Then
+        assertThrows(IllegalArgumentException.class, () -> workScheduleService.editWorkSchedule(employeeId, pastYearMonth, request));
+    }
+
+    @Test
+    public void editWorkSchedule_CurrentYearMonth() {
+        // Given
+        UUID employeeId = UUID.randomUUID();
+        YearMonth currentYearMonth = YearMonth.now();
+        WorkScheduleEditRequest request = new WorkScheduleEditRequest(Arrays.asList(WorkShift.MORNING, WorkShift.AFTERNOON));
+
+        // When
+        when(employeeRepository.findById(any())).thenReturn(Optional.of(new Employee()));
+        when(workScheduleRepository.findWorkScheduleByEmployee_UserIdAndYearMonth(any(), any())).thenReturn(Optional.of(new WorkSchedule()));
+
+        // Then
+        assertDoesNotThrow(() -> workScheduleService.editWorkSchedule(employeeId, currentYearMonth, request));
+    }
+
+    @Test
+    public void editWorkSchedule_FutureYearMonth() {
+        // Given
+        UUID employeeId = UUID.randomUUID();
+        YearMonth futureYearMonth = YearMonth.now().plusYears(1);
+        WorkScheduleEditRequest request = new WorkScheduleEditRequest(Arrays.asList(WorkShift.MORNING, WorkShift.AFTERNOON));
+
+        // When
+        when(employeeRepository.findById(any())).thenReturn(Optional.of(new Employee()));
+        when(workScheduleRepository.findWorkScheduleByEmployee_UserIdAndYearMonth(any(), any())).thenReturn(Optional.of(new WorkSchedule()));
+        when(workScheduleRepository.save(any())).thenReturn(new WorkSchedule());
+
+        // Then
+        assertDoesNotThrow(() -> workScheduleService.editWorkSchedule(employeeId, futureYearMonth, request));
     }
 
     private WorkScheduleCreateRequest createWorkScheduleCreateRequest(UUID employeeId) {

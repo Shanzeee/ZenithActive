@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Objects;
 
@@ -142,6 +143,38 @@ public class EmailSenderImpl implements EmailSender{
         javaMailSender.send(message);
 
         log.info("Loyalty points threshold email sent to: {}", email);
+    }
+
+    @Override
+    public void sendNewWorkScheduleNotification(String employeeEmail, String employeeName, YearMonth yearMonth) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(employeeEmail);
+        message.setSubject("New Work Schedule Notification");
+        message.setText("Dear " + employeeName + ",\n\n"
+                + "You have received a new work schedule for " + yearMonth.toString() + ".\n\n"
+                + "Please log in to our platform to view the details.\n\n"
+                + "Best regards,\nZenith Active");
+
+        javaMailSender.send(message);
+
+        log.info("New work schedule notification email sent to: {}", employeeEmail);
+    }
+
+    @Override
+    public void sendUpdatedWorkScheduleNotification(String employeeEmail, String employeeName, YearMonth yearMonth) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(employeeEmail);
+        message.setSubject("Updated Work Schedule Notification");
+        message.setText("Dear " + employeeName + ",\n\n"
+                + "Your work schedule for " + yearMonth.toString() + " has been updated.\n\n"
+                + "Please log in to our platform to view the changes.\n\n"
+                + "Best regards,\nZenith Active");
+
+        javaMailSender.send(message);
+
+        log.info("Updated work schedule notification email sent to: {}", employeeEmail);
     }
 
     private String buildConfirmationLink(String email) {

@@ -91,6 +91,8 @@ public class WorkScheduleController {
             YearMonth yearMonth = YearMonth.of(year, month);
             workScheduleService.editWorkSchedule(employeeId, yearMonth, request);
             return ResponseEntity.ok("Work schedule edited successfully");
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (UserNotFoundException | WorkScheduleNotFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (Exception e) {

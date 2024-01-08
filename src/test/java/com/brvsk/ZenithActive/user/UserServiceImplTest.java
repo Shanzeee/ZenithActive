@@ -30,8 +30,8 @@ class UserServiceImplTest {
     void itShouldGetAllUsers() {
         // Given
         when(userRepository.findAll()).thenReturn(Arrays.asList(
-                new User(UUID.randomUUID(), "John", "Doe", "kacpersjusz@gmail.com", Gender.MALE),
-                new User(UUID.randomUUID(), "Jane", "Doe","kacpersjuszb@gmail.com", Gender.FEMALE)
+                new User(),
+                new User()
         ));
 
         when(userMapper.mapToResponse(any())).thenReturn(new UserResponse());
@@ -46,7 +46,7 @@ class UserServiceImplTest {
     void itShouldGetUserById() {
         // Given
         UUID userId = UUID.randomUUID();
-        when(userRepository.findById(userId)).thenReturn(Optional.of(new User(userId, "John", "Doe", "kacpersjuszb@gmail.com", Gender.MALE)));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
         when(userMapper.mapToResponse(any())).thenReturn(new UserResponse());
         // When
         UserResponse result = userService.getUserById(userId);

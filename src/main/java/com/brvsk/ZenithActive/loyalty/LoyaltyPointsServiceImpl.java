@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -40,8 +41,11 @@ public class LoyaltyPointsServiceImpl implements LoyaltyPointsService{
 
     @Override
     public int getTotalPointsForMember(UUID memberId) {
-        memberRepository.findById(memberId)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new UserNotFoundException(memberId));
+        if (member.getLoyaltyPoints().equals(Set.of())) {
+            return 0;
+        }
 
         return loyaltyPointsRepository.sumPointsByMemberId(memberId);
     }

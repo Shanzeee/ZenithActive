@@ -11,7 +11,6 @@ import java.time.LocalDate;
 public class DiscountCodeCreateRequest {
 
     @NotBlank(message = "Code cannot be blank")
-    @Max(value = 31, message = "Code  cannot be greater than 31")
     private String code;
 
     @NotNull(message = "Discount percentage cannot be null")

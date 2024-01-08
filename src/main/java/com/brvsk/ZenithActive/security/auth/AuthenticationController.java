@@ -16,26 +16,26 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-  private final AuthenticationService service;
+  private final AuthenticationService authenticationService;
 
   @PostMapping("/register_member")
   public ResponseEntity<AuthenticationResponse> registerMember(@RequestBody RegisterMemberRequest request) {
-    return ResponseEntity.ok(service.registerMember(request));
+    return ResponseEntity.ok(authenticationService.registerMember(request));
   }
 
   @PostMapping("/register_employee")
   public ResponseEntity<AuthenticationResponse> registerEmployee(@RequestBody RegisterEmployeeRequest request) {
-    return ResponseEntity.ok(service.registerEmployee(request));
+    return ResponseEntity.ok(authenticationService.registerEmployee(request));
   }
 
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-    return ResponseEntity.ok(service.authenticate(request));
+    return ResponseEntity.ok(authenticationService.authenticate(request));
   }
 
   @PostMapping("/refresh-token")
   public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    service.refreshToken(request, response);
+    authenticationService.refreshToken(request, response);
   }
 
 

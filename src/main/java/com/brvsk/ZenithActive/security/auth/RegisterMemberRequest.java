@@ -19,4 +19,5 @@ public class RegisterMemberRequest {
   private Gender gender;
   private Integer height;
   private Integer weight;
+  private boolean isEmailNewsletter;
 }

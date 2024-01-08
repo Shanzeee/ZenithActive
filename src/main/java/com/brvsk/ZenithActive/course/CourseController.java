@@ -55,4 +55,10 @@ public class CourseController {
         Set<MemberResponse> members = courseService.getMembersForCourse(courseId);
         return ResponseEntity.ok(members);
     }
+
+    @GetMapping("/member/{userId}")
+    public ResponseEntity<Set<CourseResponse>> getCoursesForMember(@PathVariable UUID userId) {
+        Set<CourseResponse> courses = courseService.getCoursesForMember(userId);
+        return ResponseEntity.ok(courses);
+    }
 }

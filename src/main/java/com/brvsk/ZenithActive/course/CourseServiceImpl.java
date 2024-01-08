@@ -77,6 +77,17 @@ public class CourseServiceImpl implements CourseService{
     }
 
     @Override
+    public Set<CourseResponse> getCoursesForMember(UUID userId){
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        return member.getEnrolledCourses()
+                .stream()
+                .map(courseMapper::mapToResponse)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
     @Transactional
     public void enrolMemberToCourse(UUID courseId, UUID userId){
         Course course = courseRepository.findById(courseId)

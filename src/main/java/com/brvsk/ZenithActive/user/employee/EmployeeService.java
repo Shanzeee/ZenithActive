@@ -7,6 +7,5 @@ public interface EmployeeService {
 
     List<EmployeeResponse> getAllEmployees();
     EmployeeResponse getEmployeeById(UUID userId);
-    void createEmployee(EmployeeCreateRequest employeeCreateRequest);
     void deleteEmployee(UUID userId);
 }

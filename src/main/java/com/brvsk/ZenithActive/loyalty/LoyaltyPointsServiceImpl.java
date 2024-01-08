@@ -4,7 +4,6 @@ import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
-import com.brvsk.ZenithActive.user.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +18,6 @@ public class LoyaltyPointsServiceImpl implements LoyaltyPointsService{
 
     private final LoyaltyPointsRepository loyaltyPointsRepository;
     private final MemberRepository memberRepository;
-    private final MemberService memberService;
     private final EmailSender emailSender;
 
     @Override
@@ -27,7 +25,7 @@ public class LoyaltyPointsServiceImpl implements LoyaltyPointsService{
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new UserNotFoundException(request.getMemberId()));
 
-        int totalLoyaltyPointsBefore = memberService.calculateTotalLoyaltyPoints(member);
+        int totalLoyaltyPointsBefore = calculateTotalLoyaltyPoints(member);
         LoyaltyPoints loyaltyPoints = toEntity(request);
         loyaltyPoints.setMember(member);
 
@@ -56,6 +54,25 @@ public class LoyaltyPointsServiceImpl implements LoyaltyPointsService{
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
 
         return loyaltyPointsRepository.countPointsInDateRange(startOfDay, endOfDay);
+    }
+
+    @Override
+    public int calculateTotalLoyaltyPoints(Member member) {
+        Set<LoyaltyPoints> loyaltyPoints = member.getLoyaltyPoints();
+        int totalPoints = 0;
+
+        if (loyaltyPoints != null) {
+            for (LoyaltyPoints loyaltyPoint : loyaltyPoints) {
+                if (loyaltyPoint != null) {
+                    Integer pointsAmount = loyaltyPoint.getPointsAmount();
+                    if (pointsAmount != null) {
+                        totalPoints += pointsAmount;
+                    }
+                }
+            }
+        }
+
+        return totalPoints;
     }
 
     private void checkPointsAndSendEmail(int currentPoints, int addedPoints, String memberEmail, String memberFirstName) {

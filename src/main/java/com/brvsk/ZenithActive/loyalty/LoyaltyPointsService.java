@@ -1,5 +1,7 @@
 package com.brvsk.ZenithActive.loyalty;
 
+import com.brvsk.ZenithActive.user.member.Member;
+
 import java.util.UUID;
 
 public interface LoyaltyPointsService {
@@ -8,4 +10,6 @@ public interface LoyaltyPointsService {
     int getTotalPointsForMember(UUID memberId);
 
     long countGivenPointsToday();
+
+    int calculateTotalLoyaltyPoints(Member member);
 }

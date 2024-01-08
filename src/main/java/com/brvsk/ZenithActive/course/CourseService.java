@@ -12,6 +12,7 @@ public interface CourseService {
     List<CourseResponse> getAllCourses();
     List<CourseResponse> getCoursesForCourseType(CourseType courseType);
     List<CourseResponse> getCoursesForInstructor(UUID instructorId);
+    Set<CourseResponse> getCoursesForMember(UUID userId);
     @Transactional
     void enrolMemberToCourse(UUID courseId, UUID userId);
     Set<MemberResponse> getMembersForCourse(UUID courseId);

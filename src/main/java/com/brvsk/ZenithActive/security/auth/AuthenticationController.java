@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.security.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,12 +20,12 @@ public class AuthenticationController {
   private final AuthenticationService authenticationService;
 
   @PostMapping("/register_member")
-  public ResponseEntity<AuthenticationResponse> registerMember(@RequestBody RegisterMemberRequest request) {
+  public ResponseEntity<AuthenticationResponse> registerMember(@RequestBody @Valid RegisterMemberRequest request) {
     return ResponseEntity.ok(authenticationService.registerMember(request));
   }
 
   @PostMapping("/register_employee")
-  public ResponseEntity<AuthenticationResponse> registerEmployee(@RequestBody RegisterEmployeeRequest request) {
+  public ResponseEntity<AuthenticationResponse> registerEmployee(@RequestBody @Valid RegisterEmployeeRequest request) {
     return ResponseEntity.ok(authenticationService.registerEmployee(request));
   }
 

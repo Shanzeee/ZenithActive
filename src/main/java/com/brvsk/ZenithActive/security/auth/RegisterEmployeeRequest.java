@@ -2,11 +2,14 @@ package com.brvsk.ZenithActive.security.auth;
 
 import com.brvsk.ZenithActive.user.Gender;
 import com.brvsk.ZenithActive.user.employee.EmployeeType;
-import jakarta.validation.constraints.Email;
+import com.brvsk.ZenithActive.utils.validation.ValidEmail;
+import com.brvsk.ZenithActive.utils.validation.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -20,12 +23,10 @@ public class RegisterEmployeeRequest {
     @NotBlank(message = "Last name cannot be blank")
     private String lastName;
 
-    @Email(message = "Invalid email address")
-    @NotBlank(message = "Email cannot be blank")
+    @ValidEmail
     private String email;
 
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 6, message = "Password must be at least 6 characters long")
+    @ValidPassword
     private String password;
 
     @NotNull(message = "Gender cannot be null")

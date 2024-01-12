@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -27,6 +28,7 @@ public class EmailSenderImpl implements EmailSender{
     @Value("${spring.mail.username}")
     private String from;
 
+    @Async
     @Override
     public void sendEnrollmentConfirmation(Member member, Course course){
         SimpleMailMessage message = new SimpleMailMessage();
@@ -43,6 +45,7 @@ public class EmailSenderImpl implements EmailSender{
         log.info("Enrollment confirmation email sent to: {}", member.getEmail());
     }
 
+    @Async
     @Override
     public void sendTrainingPlanRequestConfirmation(Member member) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -61,6 +64,7 @@ public class EmailSenderImpl implements EmailSender{
 
     }
 
+    @Async
     @Override
     public void sendTrainingPlanConfirmation(Member member, Instructor instructor) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -78,6 +82,7 @@ public class EmailSenderImpl implements EmailSender{
         log.info("Training plan confirmation email sent to: {}", member.getEmail());
     }
 
+    @Async
     @Override
     public void sendWeeklyNewsletter(NewsletterSubscriber subscriber, List<String> newsletterContents) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -94,6 +99,7 @@ public class EmailSenderImpl implements EmailSender{
         log.info("Weekly newsletter sent to: {}", subscriber.getEmail());
     }
 
+    @Async
     @Override
     public void sendNewsletterConfirmationEmail(String firstName, String email) {
         String confirmationLink = buildConfirmationLink(email);
@@ -112,6 +118,7 @@ public class EmailSenderImpl implements EmailSender{
         log.info("Newsletter confirmation email sent to: {}", email);
     }
 
+    @Async
     @Override
     public void sendPurchaseConfirmedEmail(String fullName, String email, String purchaseNumber) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -128,6 +135,7 @@ public class EmailSenderImpl implements EmailSender{
         log.info("Purchase confirmation email sent to: {}", email);
     }
 
+    @Async
     @Override
     public void sendLoyaltyPointsThresholdEmail(String firstName, String email) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -145,6 +153,7 @@ public class EmailSenderImpl implements EmailSender{
         log.info("Loyalty points threshold email sent to: {}", email);
     }
 
+    @Async
     @Override
     public void sendNewWorkScheduleNotification(String employeeEmail, String employeeName, YearMonth yearMonth) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -161,6 +170,7 @@ public class EmailSenderImpl implements EmailSender{
         log.info("New work schedule notification email sent to: {}", employeeEmail);
     }
 
+    @Async
     @Override
     public void sendUpdatedWorkScheduleNotification(String employeeEmail, String employeeName, YearMonth yearMonth) {
         SimpleMailMessage message = new SimpleMailMessage();

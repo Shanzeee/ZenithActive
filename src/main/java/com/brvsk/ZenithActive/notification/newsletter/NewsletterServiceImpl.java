@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.notification.newsletter;
 
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -62,11 +63,13 @@ public class NewsletterServiceImpl implements NewsletterService{
 
 
     @Scheduled(cron = "0 0 20 * * THU")
-    public void sendWeeklyNewsletter() {
+    public void scheduledSendWeeklyNewsletter() {
         sendNewsletter();
     }
 
-    private void sendNewsletter() {
+
+    @Async
+    protected void sendNewsletter() {
         List<NewsletterSubscriber> subscribers = getAllSubscribers();
         List<String> newsletterContents = prepareNewsletterContents();
 

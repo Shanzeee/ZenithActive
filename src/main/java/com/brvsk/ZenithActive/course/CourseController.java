@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.course;
 
+import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.member.MemberResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,8 @@ public class CourseController {
             return new ResponseEntity<>("Course created successfully", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("An internal server error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -31,34 +34,71 @@ public class CourseController {
 
     @PostMapping("/enroll")
     public ResponseEntity<String> enrollMemberToCourse(@RequestParam UUID courseId, @RequestParam UUID userId) {
-        courseService.enrolMemberToCourse(courseId, userId);
-        return ResponseEntity.ok("Member enrolled to course successfully");
+        try {
+            courseService.enrolMemberToCourse(courseId, userId);
+            return ResponseEntity.ok("Member enrolled to course successfully");
+        } catch (CourseNotFoundException e) {
+            return new ResponseEntity<>("Course not found", HttpStatus.NOT_FOUND);
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An internal server error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping()
-    public List<CourseResponse> getAllCourses() {
-        return courseService.getAllCourses();
+    public ResponseEntity<List<CourseResponse>> getAllCourses() {
+        try {
+            List<CourseResponse> courses = courseService.getAllCourses();
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/byCourseType/{courseType}")
-    public List<CourseResponse> getCoursesForCourseType(@PathVariable CourseType courseType) {
-        return courseService.getCoursesForCourseType(courseType);
+    public ResponseEntity<List<CourseResponse>> getCoursesForCourseType(@PathVariable CourseType courseType) {
+        try {
+            List<CourseResponse> courses = courseService.getCoursesForCourseType(courseType);
+            return ResponseEntity.ok(courses);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/byInstructorId/{instructorId}")
-    public List<CourseResponse> getCoursesForInstructor(@PathVariable UUID instructorId) {
-        return courseService.getCoursesForInstructor(instructorId);
+    public ResponseEntity<List<CourseResponse>> getCoursesForInstructor(@PathVariable UUID instructorId) {
+        try {
+            List<CourseResponse> courses = courseService.getCoursesForInstructor(instructorId);
+            return ResponseEntity.ok(courses);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{courseId}/members")
     public ResponseEntity<Set<MemberResponse>> getMembersForCourse(@PathVariable UUID courseId) {
-        Set<MemberResponse> members = courseService.getMembersForCourse(courseId);
-        return ResponseEntity.ok(members);
+        try {
+            Set<MemberResponse> members = courseService.getMembersForCourse(courseId);
+            return ResponseEntity.ok(members);
+        } catch (CourseNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/member/{userId}")
     public ResponseEntity<Set<CourseResponse>> getCoursesForMember(@PathVariable UUID userId) {
-        Set<CourseResponse> courses = courseService.getCoursesForMember(userId);
-        return ResponseEntity.ok(courses);
+        try {
+            Set<CourseResponse> courses = courseService.getCoursesForMember(userId);
+            return ResponseEntity.ok(courses);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

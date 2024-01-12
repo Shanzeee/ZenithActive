@@ -18,12 +18,14 @@ public class MembershipController {
     private final MembershipService membershipService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> addNewMembershipToMember (@RequestBody @Valid MembershipRequest request){
+    public ResponseEntity<String> addNewMembershipToMember(@RequestBody @Valid MembershipRequest request) {
         try {
             membershipService.addNewMembershipToMember(request);
-            return ResponseEntity.ok("membership created");
+            return ResponseEntity.ok("Membership created");
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
         }
     }
 }

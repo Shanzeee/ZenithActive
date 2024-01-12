@@ -51,7 +51,7 @@ public class TrainingPlanRequestController {
                     trainingPlanRequestService.getTrainingPlanRequestById(id);
             return ResponseEntity.ok(requestDetails);
         } catch (TrainingPlanRequestNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

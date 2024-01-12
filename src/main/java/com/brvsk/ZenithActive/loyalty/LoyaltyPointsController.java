@@ -24,23 +24,29 @@ public class LoyaltyPointsController {
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
         }
     }
 
     @GetMapping("/total-points-new/{memberId}")
-    public ResponseEntity<Integer> getTotalPointsForMemberNew(@PathVariable UUID memberId) {
+    public ResponseEntity<Integer> getTotalPointsForMember(@PathVariable UUID memberId) {
         try {
             int totalPoints = loyaltyPointsService.getTotalPointsForMember(memberId);
             return ResponseEntity.ok(totalPoints);
         } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
     @GetMapping("/count-given-points-today")
     public ResponseEntity<Long> countGivenPointsToday() {
-        long count = loyaltyPointsService.countGivenPointsToday();
-        return ResponseEntity.ok(count);
+        try {
+            long count = loyaltyPointsService.countGivenPointsToday();
+            return ResponseEntity.ok(count);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }

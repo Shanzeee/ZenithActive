@@ -19,46 +19,35 @@ public class DiscountCodeController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createDiscountCode(@RequestBody @Valid DiscountCodeCreateRequest request) {
-        try {
-            discountCodeService.createDiscountCode(request);
-            return new ResponseEntity<>("Discount code created successfully", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while creating the discount code", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        discountCodeService.createDiscountCode(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Discount code created successfully");
     }
 
     @DeleteMapping("/{code}")
     public ResponseEntity<String> deleteDiscountCode(@PathVariable String code) {
         try {
             discountCodeService.deleteDiscountCode(code);
-            return new ResponseEntity<>("Discount code deleted successfully", HttpStatus.OK);
+            return ResponseEntity.ok("Discount code deleted successfully");
         } catch (DiscountCodeNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while deleting the discount code", HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while deleting the discount code");
         }
-    }
-
-    @GetMapping("/{code}")
-    public ResponseEntity<DiscountCode> getDiscountCode(@PathVariable String code) {
-        return discountCodeService.getDiscountCode(code)
-                .map(discountCode -> new ResponseEntity<>(discountCode, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/calculate/{code}")
     public ResponseEntity<Integer> calculateDiscountPercentage(@PathVariable String code) {
         try {
             Integer discountPercentage = discountCodeService.calculateDiscountPercentage(code);
-            return new ResponseEntity<>(discountPercentage, HttpStatus.OK);
+            return ResponseEntity.ok(discountPercentage);
         } catch (DiscountCodeNotFoundException | DiscountCodeNotActiveException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<DiscountCode>> getAllDiscountCodes() {
         List<DiscountCode> discountCodes = discountCodeService.getAllDiscountCodes();
-        return new ResponseEntity<>(discountCodes, HttpStatus.OK);
+        return ResponseEntity.ok(discountCodes);
     }
 }

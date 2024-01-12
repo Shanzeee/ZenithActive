@@ -22,10 +22,6 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
         discountCodeRepository.deleteById(code);
     }
     @Override
-    public Optional<DiscountCode> getDiscountCode(String code) {
-        return discountCodeRepository.findById(code);
-    }
-    @Override
     public Integer calculateDiscountPercentage(String code) {
         DiscountCode discountCode = validateDiscountCode(code);
         return discountCode.getDiscountPercentage();
@@ -35,6 +31,9 @@ public class DiscountCodeServiceImpl implements DiscountCodeService {
         return discountCodeRepository.findAll();
     }
 
+    private Optional<DiscountCode> getDiscountCode(String code) {
+        return discountCodeRepository.findById(code);
+    }
     private DiscountCode validateDiscountCode(String code) throws DiscountCodeNotFoundException, DiscountCodeNotActiveException {
         DiscountCode discountCode = getDiscountCode(code)
                 .orElseThrow(() -> new DiscountCodeNotFoundException(code));

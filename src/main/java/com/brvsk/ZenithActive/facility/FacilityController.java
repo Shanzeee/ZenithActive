@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.facility;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,25 +18,45 @@ public class FacilityController {
 
     @GetMapping
     public ResponseEntity<List<FacilityResponse>> getAllFacilities() {
-        List<FacilityResponse> facilities = facilitiesService.getAllFacilities();
-        return ResponseEntity.ok(facilities);
+        try {
+            List<FacilityResponse> facilities = facilitiesService.getAllFacilities();
+            return ResponseEntity.ok(facilities);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @GetMapping("/{facilityId}")
     public ResponseEntity<FacilityResponse> getFacilityById(@PathVariable UUID facilityId) {
-        FacilityResponse facility = facilitiesService.getFacilityById(facilityId);
-        return ResponseEntity.ok(facility);
+        try {
+            FacilityResponse facility = facilitiesService.getFacilityById(facilityId);
+            return ResponseEntity.ok(facility);
+        } catch (FacilityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping
     public ResponseEntity<Facility> addFacility(@RequestBody @Valid FacilityRequest request) {
-        Facility addedFacility = facilitiesService.addFacility(request);
-        return ResponseEntity.ok(addedFacility);
+        try {
+            Facility addedFacility = facilitiesService.addFacility(request);
+            return ResponseEntity.ok(addedFacility);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("/{facilityId}")
     public ResponseEntity<Void> deleteFacility(@PathVariable UUID facilityId) {
-        facilitiesService.deleteFacility(facilityId);
-        return ResponseEntity.noContent().build();
+        try {
+            facilitiesService.deleteFacility(facilityId);
+            return ResponseEntity.noContent().build();
+        } catch (FacilityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

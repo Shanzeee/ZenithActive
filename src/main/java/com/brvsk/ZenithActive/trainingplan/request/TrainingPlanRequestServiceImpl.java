@@ -32,22 +32,16 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
 
     @Override
     public void createTrainingPlanRequest(TrainingPlanRequestCreateCommand command) {
-        Member member = memberRepository.findById(command.getMemberId())
-                .orElseThrow(() -> new UserNotFoundException(command.getMemberId()));
+        Member member = getMember(command.getMemberId());
 
-        TrainingPlanRequest trainingPlanRequest = TrainingPlanRequest.builder()
-                .id(UUID.randomUUID())
-                .created(false)
-                .member(member)
-                .memberInfo(command.getMemberInfo())
-                .build();
+        TrainingPlanRequest trainingPlanRequest = buildTrainingPlanRequest(member, command);
 
-        trainingPlanRequestRepository.save(trainingPlanRequest);
+        saveTrainingPlanRequest(trainingPlanRequest);
 
         LoyaltyPointsCreateRequest loyaltyPointsCreateRequest = buildLoyaltyPointsCreateRequest(command.getMemberId());
-        loyaltyPointsService.addLoyaltyPoints(loyaltyPointsCreateRequest);
+        addLoyaltyPoints(loyaltyPointsCreateRequest);
 
-        emailSender.sendTrainingPlanRequestConfirmation(member);
+        sendTrainingPlanRequestConfirmationEmail(member);
     }
 
     @Override
@@ -64,6 +58,32 @@ public class TrainingPlanRequestServiceImpl implements TrainingPlanRequestServic
                 .findById(id)
                 .map(trainingPlanRequestMapper::toResponseDetailedInfo)
                 .orElseThrow(() -> new TrainingPlanRequestNotFoundException(id));
+    }
+
+    private Member getMember(UUID memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new UserNotFoundException(memberId));
+    }
+
+    private TrainingPlanRequest buildTrainingPlanRequest(Member member, TrainingPlanRequestCreateCommand command) {
+        return TrainingPlanRequest.builder()
+                .id(UUID.randomUUID())
+                .created(false)
+                .member(member)
+                .memberInfo(command.getMemberInfo())
+                .build();
+    }
+
+    private void saveTrainingPlanRequest(TrainingPlanRequest trainingPlanRequest) {
+        trainingPlanRequestRepository.save(trainingPlanRequest);
+    }
+
+    private void addLoyaltyPoints(LoyaltyPointsCreateRequest loyaltyPointsCreateRequest) {
+        loyaltyPointsService.addLoyaltyPoints(loyaltyPointsCreateRequest);
+    }
+
+    private void sendTrainingPlanRequestConfirmationEmail(Member member) {
+        emailSender.sendTrainingPlanRequestConfirmation(member);
     }
 
     private LoyaltyPointsCreateRequest buildLoyaltyPointsCreateRequest(UUID memberId){

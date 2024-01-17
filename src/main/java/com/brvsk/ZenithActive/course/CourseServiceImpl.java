@@ -36,11 +36,8 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public void createNewCourse(CourseCreateRequest request){
-        Instructor instructor = instructorRepository.findById(request.getInstructorId())
-                .orElseThrow(() -> new UserNotFoundException(request.getInstructorId()));
-
-        Facility facility = facilityRepository.findById(request.getFacilityId())
-                .orElseThrow(() -> new FacilityNotFoundException(request.getFacilityId()));
+        Instructor instructor = getInstructor(request.getInstructorId());
+        Facility facility = getFacility(request.getFacilityId());
 
 
         validateCourseHours(request.getDayOfWeek(), request.getStartTime(), request.getEndTime(), facility);
@@ -78,8 +75,7 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Set<CourseResponse> getCoursesForMember(UUID userId){
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+        Member member = getMember(userId);
 
         return member.getEnrolledCourses()
                 .stream()
@@ -90,10 +86,8 @@ public class CourseServiceImpl implements CourseService{
     @Override
     @Transactional
     public void enrolMemberToCourse(UUID courseId, UUID userId){
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new CourseNotFoundException(courseId));
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+        Course course = getCourse(courseId);
+        Member member = getMember(userId);
 
         course.getEnrolledMembers().add(member);
         member.getEnrolledCourses().add(course);
@@ -106,13 +100,32 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Set<MemberResponse> getMembersForCourse(UUID courseId){
-        Course course = courseRepository.findById(courseId)
-                .orElseThrow(() -> new CourseNotFoundException(courseId));
+        Course course = getCourse(courseId);
 
         return course.getEnrolledMembers()
                 .stream()
                 .map(memberMapper::toMemberResponse)
                 .collect(Collectors.toSet());
+    }
+
+    private Instructor getInstructor(UUID instructorId) {
+        return instructorRepository.findById(instructorId)
+                .orElseThrow(() -> new UserNotFoundException(instructorId));
+    }
+
+    private Facility getFacility(UUID facilityId) {
+        return facilityRepository.findById(facilityId)
+                .orElseThrow(() -> new FacilityNotFoundException(facilityId));
+    }
+
+    private Member getMember(UUID memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new UserNotFoundException(memberId));
+    }
+
+    private Course getCourse(UUID courseId) {
+        return courseRepository.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId));
     }
 
     private void validateCourseHours(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Facility facility) {

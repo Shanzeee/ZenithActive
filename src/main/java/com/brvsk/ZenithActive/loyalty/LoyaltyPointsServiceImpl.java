@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,21 +57,13 @@ public class LoyaltyPointsServiceImpl implements LoyaltyPointsService{
 
     @Override
     public int calculateTotalLoyaltyPoints(Member member) {
-        Set<LoyaltyPoints> loyaltyPoints = member.getLoyaltyPoints();
-        int totalPoints = 0;
-
-        if (loyaltyPoints != null) {
-            for (LoyaltyPoints loyaltyPoint : loyaltyPoints) {
-                if (loyaltyPoint != null) {
-                    Integer pointsAmount = loyaltyPoint.getPointsAmount();
-                    if (pointsAmount != null) {
-                        totalPoints += pointsAmount;
-                    }
-                }
-            }
-        }
-
-        return totalPoints;
+        return Optional.ofNullable(member.getLoyaltyPoints())
+                .orElse(Collections.emptySet())
+                .stream()
+                .map(LoyaltyPoints::getPointsAmount)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     private void checkPointsAndSendEmail(int currentPoints, int addedPoints, String memberEmail, String memberFirstName) {

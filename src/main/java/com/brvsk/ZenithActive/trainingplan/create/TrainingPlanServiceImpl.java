@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,35 +32,49 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
     private final TrainingPlanRequestRepository trainingPlanRequestRepository;
     private final EmailSender emailSender;
 
+    private static final String TRAINING_PLANS_FOLDER = "training_plans/";
+
+
     @Override
     public void createTrainingPlan(TrainingPlanCreateRequest request) {
-        Member member = memberRepository.findById(request.getMemberId())
-                .orElseThrow(() -> new UserNotFoundException(request.getMemberId()));
+        Member member = getMember(request.getMemberId());
+        Instructor instructor = getInstructor(request.getInstructorId());
+        TrainingPlanRequest trainingPlanRequest = getTrainingPlanRequest(request.getTrainingPlanRequestId());
 
-        Instructor instructor = instructorRepository.findById(request.getInstructorId())
-                .orElseThrow(() -> new UserNotFoundException(request.getInstructorId()));
+        TrainingPlan trainingPlan = buildTrainingPlan(request, member, instructor, trainingPlanRequest);
 
-        TrainingPlanRequest trainingPlanRequest = trainingPlanRequestRepository.findById(request.getTrainingPlanRequestId())
-                .orElseThrow(() -> new TrainingPlanRequestNotFoundException(request.getTrainingPlanRequestId()));
+        generateAndSaveTrainingPlanPdf(trainingPlan, request.getTrainingPlanRequestId());
+        updateMemberTrainingPlanPaths(member, request.getMemberId(), request.getTrainingPlanRequestId());
+        markTrainingPlanRequestAsCreated(trainingPlanRequest);
+        sendTrainingPlanConfirmationEmail(member, instructor);
+    }
 
-        TrainingPlan trainingPlan = TrainingPlan.builder()
+    private Member getMember(UUID memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new UserNotFoundException(memberId));
+    }
+
+    private Instructor getInstructor(UUID instructorId) {
+        return instructorRepository.findById(instructorId)
+                .orElseThrow(() -> new UserNotFoundException(instructorId));
+    }
+
+    private TrainingPlanRequest getTrainingPlanRequest(UUID requestId) {
+        return trainingPlanRequestRepository.findById(requestId)
+                .orElseThrow(() -> new TrainingPlanRequestNotFoundException(requestId));
+    }
+
+    private TrainingPlan buildTrainingPlan(TrainingPlanCreateRequest request, Member member, Instructor instructor, TrainingPlanRequest trainingPlanRequest) {
+        return TrainingPlan.builder()
                 .member(member)
                 .instructor(instructor)
                 .trainingPlanRequest(trainingPlanRequest)
                 .trainingDays(mapTrainingDays(request.getTrainingDays()))
                 .build();
+    }
 
-        PdfTrainingPlanGenerator.createTrainingPlanPdf(trainingPlan, "training_plans", trainingPlan.getTrainingPlanRequest().getId().toString());
-        String pathToTrainingPlanPdf = "training_plans/"
-                + request.getMemberId() + "/"
-                + request.getTrainingPlanRequestId() + ".pdf";
-        member.getTrainingPlanPaths().add(pathToTrainingPlanPdf);
-        memberRepository.save(member);
-
-        trainingPlanRequest.setCreated(true);
-        trainingPlanRequestRepository.save(trainingPlanRequest);
-
-        emailSender.sendTrainingPlanConfirmation(member,instructor);
+    private void generateAndSaveTrainingPlanPdf(TrainingPlan trainingPlan, UUID requestId) {
+        PdfTrainingPlanGenerator.createTrainingPlanPdf(trainingPlan, TRAINING_PLANS_FOLDER, requestId.toString());
     }
 
 
@@ -87,6 +102,21 @@ public class TrainingPlanServiceImpl implements TrainingPlanService {
         exercise.setSets(exerciseRequest.getSets());
         exercise.setReps(exerciseRequest.getReps());
         return exercise;
+    }
+
+    private void updateMemberTrainingPlanPaths(Member member, UUID memberId, UUID requestId) {
+        String pathToTrainingPlanPdf = TRAINING_PLANS_FOLDER + memberId + "/" + requestId + ".pdf";
+        member.getTrainingPlanPaths().add(pathToTrainingPlanPdf);
+        memberRepository.save(member);
+    }
+
+    private void markTrainingPlanRequestAsCreated(TrainingPlanRequest trainingPlanRequest) {
+        trainingPlanRequest.setCreated(true);
+        trainingPlanRequestRepository.save(trainingPlanRequest);
+    }
+
+    private void sendTrainingPlanConfirmationEmail(Member member, Instructor instructor) {
+        emailSender.sendTrainingPlanConfirmation(member, instructor);
     }
 
 }

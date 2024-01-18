@@ -6,10 +6,7 @@ import java.util.UUID;
 
 public interface LoyaltyPointsService {
     void addLoyaltyPoints(LoyaltyPointsCreateRequest request);
-
     int getTotalPointsForMember(UUID memberId);
-
     long countGivenPointsToday();
-
     int calculateTotalLoyaltyPoints(Member member);
 }

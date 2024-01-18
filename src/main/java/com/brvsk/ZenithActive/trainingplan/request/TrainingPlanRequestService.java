@@ -9,8 +9,6 @@ import java.util.UUID;
 
 public interface TrainingPlanRequestService {
     void createTrainingPlanRequest(TrainingPlanRequestCreateCommand command);
-
     List<TrainingPlanRequestResponse> getPendingTrainingPlanRequests();
-
     TrainingPlanRequestResponseDetailedInfo getTrainingPlanRequestById(UUID id);
 }

@@ -3,19 +3,19 @@ package com.brvsk.ZenithActive.course;
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.facility.FacilityNotFoundException;
 import com.brvsk.ZenithActive.facility.FacilityRepository;
+import com.brvsk.ZenithActive.notification.email.EmailSender;
+import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberMapper;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
 import com.brvsk.ZenithActive.user.member.MemberResponse;
-import com.brvsk.ZenithActive.notification.email.EmailSender;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +40,8 @@ public class CourseServiceImpl implements CourseService{
         Facility facility = getFacility(request.getFacilityId());
 
 
-        validateCourseHours(request.getDayOfWeek(), request.getStartTime(), request.getEndTime(), facility);
-        validateInstructorAvailability(request.getDayOfWeek(), request.getStartTime(), request.getEndTime(), instructor);
+        validateCourseHours(request.getLocalDate(), request.getStartTime(), request.getEndTime(), facility);
+        validateInstructorAvailability(request.getLocalDate(), request.getStartTime(), request.getEndTime(), instructor);
 
         Course courseToAdd = toEntity(request);
         courseToAdd.setFacility(facility);
@@ -128,16 +128,16 @@ public class CourseServiceImpl implements CourseService{
                 .orElseThrow(() -> new CourseNotFoundException(courseId));
     }
 
-    private void validateCourseHours(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Facility facility) {
-        List<Course> overlappingCourses = courseRepository.findOverlappingCourses(dayOfWeek, startTime, endTime, facility);
+    private void validateCourseHours(LocalDate localDate, LocalTime startTime, LocalTime endTime, Facility facility) {
+        List<Course> overlappingCourses = courseRepository.findOverlappingCourses(localDate, startTime, endTime, facility);
 
         if (!overlappingCourses.isEmpty()) {
             throw new IllegalArgumentException("The course hours overlap with existing courses.");
         }
     }
 
-    private void validateInstructorAvailability(DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, Instructor instructor) {
-        List<Course> overlappingCourses = courseRepository.findOverlappingInstructorCourses(dayOfWeek, startTime, endTime, instructor);
+    private void validateInstructorAvailability(LocalDate localDate, LocalTime startTime, LocalTime endTime, Instructor instructor) {
+        List<Course> overlappingCourses = courseRepository.findOverlappingInstructorCourses(localDate, startTime, endTime, instructor);
 
         if (!overlappingCourses.isEmpty()) {
             throw new IllegalArgumentException("The instructor is not available during the specified hours.");
@@ -150,7 +150,7 @@ public class CourseServiceImpl implements CourseService{
                 .name(request.getName())
                 .description(request.getDescription())
                 .groupSize(request.getGroupSize())
-                .dayOfWeek(request.getDayOfWeek())
+                .localDate(request.getLocalDate())
                 .startTime(request.getStartTime())
                 .endTime(request.getEndTime())
                 .build();

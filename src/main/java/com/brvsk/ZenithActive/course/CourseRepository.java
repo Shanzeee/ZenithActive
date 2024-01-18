@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -16,22 +16,22 @@ import java.util.UUID;
 public interface CourseRepository extends JpaRepository<Course, UUID> {
 
     @Query("SELECT c FROM Courses c " +
-            "WHERE c.dayOfWeek = :dayOfWeek " +
+            "WHERE :localDate = c.localDate " +
             "AND :endTime > c.startTime AND :startTime < c.endTime " +
             "AND :facility = c.facility")
     List<Course> findOverlappingCourses(
-            @Param("dayOfWeek") DayOfWeek dayOfWeek,
+            @Param("localDate") LocalDate localDate,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime,
             @Param("facility") Facility facility
     );
 
     @Query("SELECT c FROM Courses c " +
-            "WHERE c.dayOfWeek = :dayOfWeek " +
+            "WHERE :localDate = c.localDate " +
             "AND :endTime > c.startTime AND :startTime < c.endTime " +
             "AND :instructor = c.instructor")
     List<Course> findOverlappingInstructorCourses(
-            @Param("dayOfWeek") DayOfWeek dayOfWeek,
+            @Param("localDate") LocalDate localDate,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime,
             @Param("instructor") Instructor instructor

@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -19,7 +19,7 @@ public class CourseResponse {
     private String courseDescription;
     private Integer groupSize;
     private Integer currentEnrolment;
-    private DayOfWeek dayOfWeek;
+    private LocalDate localDate;
     private String courseDuration;
     private String facilityName;
     private UUID instructorId;

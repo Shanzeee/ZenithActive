@@ -1,6 +1,9 @@
 package com.brvsk.ZenithActive.course;
 
 public enum CourseType {
-    ACTIVITY,
-    STRETCH
+    ABT,
+    ZUMBA,
+    BODY_SHAPE,
+    STRETCHING,
+    PILATES
 }

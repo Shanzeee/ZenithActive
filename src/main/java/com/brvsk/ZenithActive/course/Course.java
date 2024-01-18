@@ -1,14 +1,14 @@
 package com.brvsk.ZenithActive.course;
 
 import com.brvsk.ZenithActive.facility.Facility;
+import com.brvsk.ZenithActive.review.Review;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.member.Member;
-import com.brvsk.ZenithActive.review.Review;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -55,7 +55,7 @@ public class Course {
     private Set<Review> reviews = new HashSet<>();
 
     @Column(nullable = false)
-    private DayOfWeek dayOfWeek;
+    private LocalDate localDate;
 
     @Column(nullable = false)
     private LocalTime startTime;

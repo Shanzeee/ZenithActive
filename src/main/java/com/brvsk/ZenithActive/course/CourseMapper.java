@@ -20,7 +20,7 @@ public class CourseMapper {
                 .courseDescription(course.getDescription())
                 .groupSize(course.getGroupSize())
                 .currentEnrolment(course.getEnrolledMembers().size() + 1)
-                .dayOfWeek(course.getDayOfWeek())
+                .localDate(course.getLocalDate())
                 .courseDuration(formattedDuration)
                 .facilityName(course.getFacility().getName())
                 .instructorId(course.getInstructor().getUserId())

@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -28,11 +28,11 @@ public class CourseCreateRequest {
 
     @NotNull(message = "Group size cannot be null")
     @Min(value = 0, message = "Group size cannot be negative")
-    @Max(value = 100, message = "Group size cannot be greater than 50")
+    @Max(value = 100, message = "Group size cannot be greater than 100")
     private Integer groupSize;
 
-    @NotNull(message = "Day of week cannot be null")
-    private DayOfWeek dayOfWeek;
+    @NotNull(message = "date cannot be null")
+    private LocalDate localDate;
 
     @NotNull(message = "Start time cannot be null")
     private LocalTime startTime;

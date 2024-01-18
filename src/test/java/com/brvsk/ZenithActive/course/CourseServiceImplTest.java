@@ -21,6 +21,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -65,14 +66,14 @@ class CourseServiceImplTest {
         when(instructorRepository.findById(request.getInstructorId())).thenReturn(Optional.of(instructor));
         when(facilityRepository.findById(request.getFacilityId())).thenReturn(Optional.of(facility));
         when(courseRepository.findOverlappingCourses(
-                ArgumentMatchers.any(DayOfWeek.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Facility.class)))
                 .thenReturn(List.of());
 
         when(courseRepository.findOverlappingInstructorCourses(
-                ArgumentMatchers.any(DayOfWeek.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Instructor.class)))
@@ -96,7 +97,7 @@ class CourseServiceImplTest {
         when(facilityRepository.findById(request.getFacilityId())).thenReturn(Optional.of(facility));
 
         when(courseRepository.findOverlappingCourses(
-                ArgumentMatchers.any(DayOfWeek.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Facility.class)))
@@ -106,7 +107,7 @@ class CourseServiceImplTest {
         assertThrows(IllegalArgumentException.class, () -> courseServiceImpl.createNewCourse(request));
 
         verify(courseRepository, times(1)).findOverlappingCourses(
-                ArgumentMatchers.any(DayOfWeek.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Facility.class));
@@ -123,7 +124,7 @@ class CourseServiceImplTest {
         when(facilityRepository.findById(request.getFacilityId())).thenReturn(Optional.of(facility));
 
         when(courseRepository.findOverlappingInstructorCourses(
-                ArgumentMatchers.any(DayOfWeek.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Instructor.class)))
@@ -133,7 +134,7 @@ class CourseServiceImplTest {
         assertThrows(IllegalArgumentException.class, () -> courseServiceImpl.createNewCourse(request));
 
         verify(courseRepository, times(1)).findOverlappingInstructorCourses(
-                ArgumentMatchers.any(DayOfWeek.class),
+                ArgumentMatchers.any(LocalDate.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(LocalTime.class),
                 ArgumentMatchers.any(Instructor.class));
@@ -179,7 +180,7 @@ class CourseServiceImplTest {
     @Test
     void getCoursesForCourseType_NoCourses_ReturnsEmptyList() {
         // Given
-        CourseType courseType = CourseType.ACTIVITY;
+        CourseType courseType = CourseType.PILATES;
         when(courseRepository.getCoursesByCourseType(courseType)).thenReturn(Collections.emptyList());
 
         // When
@@ -192,7 +193,7 @@ class CourseServiceImplTest {
     @Test
     void getCoursesForCourseType_CoursesExist_ReturnsMappedCourseResponses() {
         // Given
-        CourseType courseType = CourseType.ACTIVITY;
+        CourseType courseType = CourseType.PILATES;
         Course course1 = createCourse("Yoga Course 1", courseType);
         Course course2 = createCourse("Yoga Course 2", courseType);
         List<Course> courses = Arrays.asList(course1, course2);
@@ -307,11 +308,11 @@ class CourseServiceImplTest {
     private CourseCreateRequest createValidCourseCreateRequest() {
         return CourseCreateRequest
                 .builder()
-                .courseType(CourseType.STRETCH)
+                .courseType(CourseType.PILATES)
                 .name("Test course")
                 .description("Description of test course")
                 .groupSize(15)
-                .dayOfWeek(DayOfWeek.MONDAY)
+                .localDate(LocalDate.of(2000,12,12))
                 .startTime(LocalTime.of(10, 0, 0))
                 .endTime(LocalTime.of(12, 0, 0))
                 .facilityId(UUID.fromString("cee44ecd-d61c-4921-8a66-07dc38beff91")) //Valid facility ID
@@ -321,11 +322,11 @@ class CourseServiceImplTest {
     private Course createNotValidCourse() {
         return Course.builder()
                 .id(UUID.randomUUID())
-                .courseType(CourseType.STRETCH)
+                .courseType(CourseType.PILATES)
                 .name("Existing Course")
                 .description("Description of Existing Course")
                 .groupSize(20)
-                .dayOfWeek(DayOfWeek.MONDAY)
+                .localDate(LocalDate.of(2000,12,12))
                 .startTime(LocalTime.of(11, 0, 0))
                 .endTime(LocalTime.of(13, 0, 0))
                 .facility(createFacility())
@@ -370,11 +371,11 @@ class CourseServiceImplTest {
     private Course createCourse(String name) {
         return Course.builder()
                 .id(UUID.randomUUID())
-                .courseType(CourseType.ACTIVITY)
+                .courseType(CourseType.PILATES)
                 .name(name)
                 .description("Course description")
                 .groupSize(15)
-                .dayOfWeek(DayOfWeek.MONDAY)
+                .localDate(LocalDate.of(2000,12,12))
                 .startTime(LocalTime.of(10, 0, 0))
                 .endTime(LocalTime.of(12, 0, 0))
                 .enrolledMembers(new HashSet<>())
@@ -388,7 +389,7 @@ class CourseServiceImplTest {
                 .name(name)
                 .description("Course description")
                 .groupSize(15)
-                .dayOfWeek(DayOfWeek.MONDAY)
+                .localDate(LocalDate.of(2000,12,12))
                 .startTime(LocalTime.of(10, 0, 0))
                 .endTime(LocalTime.of(12, 0, 0))
                 .build();
@@ -401,7 +402,7 @@ class CourseServiceImplTest {
                 .courseName(course.getName())
                 .courseDescription(course.getDescription())
                 .groupSize(course.getGroupSize())
-                .dayOfWeek(course.getDayOfWeek())
+                .localDate(LocalDate.of(2000,12,12))
                 .courseDuration("10:00 - 12:00")
                 .facilityName("Facility")
                 .instructorId(UUID.randomUUID())

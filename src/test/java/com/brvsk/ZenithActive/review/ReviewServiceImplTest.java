@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Optional;
@@ -159,11 +159,11 @@ class ReviewServiceImplTest {
     private Course createCourse(UUID courseId) {
         Course course = new Course();
         course.setId(courseId);
-        course.setCourseType(CourseType.STRETCH);
+        course.setCourseType(CourseType.PILATES);
         course.setName("CourseName");
         course.setDescription("CourseDescription");
         course.setGroupSize(15);
-        course.setDayOfWeek(DayOfWeek.MONDAY);
+        course.setLocalDate(LocalDate.of(2000,12,12));
         course.setStartTime(LocalTime.of(10, 0));
         course.setEndTime(LocalTime.of(12, 0));
         return course;

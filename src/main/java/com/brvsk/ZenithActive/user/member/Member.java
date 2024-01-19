@@ -1,9 +1,10 @@
 package com.brvsk.ZenithActive.user.member;
 
-import com.brvsk.ZenithActive.course.Course;
+import com.brvsk.ZenithActive.course.session.Session;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPoints;
 import com.brvsk.ZenithActive.membership.Membership;
-import com.brvsk.ZenithActive.review.Review;
+import com.brvsk.ZenithActive.review.course.ReviewCourse;
+import com.brvsk.ZenithActive.review.instructor.ReviewInstructor;
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
 import com.brvsk.ZenithActive.user.User;
 import jakarta.persistence.*;
@@ -31,13 +32,16 @@ public class Member extends User {
 
     @ManyToMany
     @JoinTable(
-            name = "member_course_enrollment",
+            name = "member_session_enrollment",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id"))
-    private Set<Course> enrolledCourses = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "session_id"))
+    private Set<Session> enrolledSessions = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
-    private Set<Review> reviews = new HashSet<>();
+    private Set<ReviewInstructor> reviewInstructors = new HashSet<>();
+
+    @OneToMany(mappedBy = "member")
+    private Set<ReviewCourse> reviewCourses = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
     private List<TrainingPlanRequest> trainingPlanRequestList = new ArrayList<>();

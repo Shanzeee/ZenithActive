@@ -1,9 +1,9 @@
 package com.brvsk.ZenithActive.notification.email;
 
-import com.brvsk.ZenithActive.course.Course;
+import com.brvsk.ZenithActive.course.session.Session;
+import com.brvsk.ZenithActive.notification.newsletter.NewsletterSubscriber;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.member.Member;
-import com.brvsk.ZenithActive.notification.newsletter.NewsletterSubscriber;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,13 +30,13 @@ public class EmailSenderImpl implements EmailSender{
 
     @Async
     @Override
-    public void sendEnrollmentConfirmation(Member member, Course course){
+    public void sendEnrollmentConfirmation(Member member, Session session){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(member.getEmail());
         message.setSubject("Enrollment Confirmation");
         message.setText("Dear " + member.getFirstName() + ",\n\n"
-                + "You have successfully enrolled in the course '" + course.getName() + "'.\n\n"
+                + "You have successfully enrolled in the course '" + session.getCourse().getName() + "'.\n\n"
                 + "Thank you for choosing our platform.\n\n"
                 + "Best regards,\nZenith Active ;)");
 

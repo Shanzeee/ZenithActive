@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.user.instructor;
 
-import com.brvsk.ZenithActive.course.Course;
-import com.brvsk.ZenithActive.review.Review;
+import com.brvsk.ZenithActive.course.session.Session;
+import com.brvsk.ZenithActive.review.instructor.ReviewInstructor;
 import com.brvsk.ZenithActive.user.employee.Employee;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,8 +31,8 @@ public class Instructor extends Employee {
     private List<Speciality> specialities;
 
     @OneToMany(mappedBy = "instructor")
-    private List<Course> courses = new ArrayList<>();
+    private List<Session> sessions = new ArrayList<>();
 
     @OneToMany(mappedBy = "instructor")
-    private Set<Review> reviews = new HashSet<>();
+    private Set<ReviewInstructor> reviews = new HashSet<>();
 }

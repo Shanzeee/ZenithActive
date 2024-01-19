@@ -5,24 +5,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReviewMapper {
 
-    public ReviewResponse toReviewCourseResponse(Review review){
+    public ReviewResponse toReviewResponse(Review review){
         return ReviewResponse.builder()
                 .reviewId(review.getId())
                 .reviewedByUserId(review.getMember().getUserId())
                 .userName(review.getMember().getFirstName() + " " + review.getMember().getLastName())
-                .rating(review.getCourseRating())
-                .comment(review.getCourseComment())
-                .uploadAt(review.getTimestamp())
-                .build();
-    }
-
-    public ReviewResponse toReviewInstructorResponse(Review review){
-        return ReviewResponse.builder()
-                .reviewId(review.getId())
-                .reviewedByUserId(review.getMember().getUserId())
-                .userName(review.getMember().getFirstName() + " " + review.getMember().getLastName())
-                .rating(review.getInstructorRating())
-                .comment(review.getInstructorComment())
+                .rating(review.getRating())
+                .comment(review.getComment())
                 .uploadAt(review.getTimestamp())
                 .build();
     }

@@ -7,8 +7,6 @@ import java.util.UUID;
 
 public interface ReviewService {
     void createNewReview(ReviewCreateRequest request);
-    Page<ReviewResponse> getCourseReviews(UUID courseId, Pageable pageable);
-    Page<ReviewResponse> getInstructorReviews(UUID instructorId, Pageable pageable);
-    Double getAverageInstructorRating(UUID instructorId);
-    Double getAverageCourseRating(UUID courseId);
+    Page<ReviewResponse> getReviews(UUID instructorId, Pageable pageable);
+    Double getAverageRating(UUID instructorId);
 }

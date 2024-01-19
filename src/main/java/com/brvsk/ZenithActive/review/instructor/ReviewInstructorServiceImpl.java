@@ -3,10 +3,7 @@ package com.brvsk.ZenithActive.review.instructor;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsCreateRequest;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsType;
-import com.brvsk.ZenithActive.review.ReviewCreateRequest;
-import com.brvsk.ZenithActive.review.ReviewMapper;
-import com.brvsk.ZenithActive.review.ReviewResponse;
-import com.brvsk.ZenithActive.review.ReviewService;
+import com.brvsk.ZenithActive.review.*;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
@@ -37,6 +34,8 @@ public class ReviewInstructorServiceImpl implements ReviewService {
     public void createNewReview(ReviewCreateRequest request) {
         Member member = getMemberById(request.getMemberId());
         Instructor instructor = getInstructorById(request.getReviewedEntityId());
+
+        checkIfUserAlreadyReviewedInstructor(member, instructor);
 
         ReviewInstructor reviewInstructor = toEntity(request);
         reviewInstructor.setMember(member);
@@ -88,6 +87,12 @@ public class ReviewInstructorServiceImpl implements ReviewService {
     private Instructor getInstructorById(UUID instructorId) {
         return instructorRepository.findById(instructorId)
                 .orElseThrow(() -> new UserNotFoundException(instructorId));
+    }
+
+    private void checkIfUserAlreadyReviewedInstructor(Member member, Instructor instructor) {
+        if (reviewInstructorRepository.existsByMemberAndInstructor(member, instructor)) {
+            throw new ReviewAlreadyExistsException(instructor.getUserId());
+        }
     }
 
     private ReviewInstructor toEntity(ReviewCreateRequest request) {

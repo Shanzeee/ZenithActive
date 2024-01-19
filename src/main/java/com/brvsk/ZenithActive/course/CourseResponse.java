@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Builder
@@ -17,11 +16,5 @@ public class CourseResponse {
     private CourseType courseType;
     private String courseName;
     private String courseDescription;
-    private Integer groupSize;
-    private Integer currentEnrolment;
-    private LocalDate localDate;
-    private String courseDuration;
-    private String facilityName;
-    private UUID instructorId;
-    private String instructorName;
+
 }

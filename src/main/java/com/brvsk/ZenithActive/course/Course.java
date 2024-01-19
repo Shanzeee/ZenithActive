@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.course;
 
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.review.Review;
+import com.brvsk.ZenithActive.review.course.ReviewCourse;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.member.Member;
 import jakarta.persistence.*;
@@ -37,39 +38,12 @@ public class Course {
     @Column(nullable = false, length = 1000)
     private String description;
 
-    @Min(0)
-    @Column(nullable = false)
-    private Integer groupSize;
-
-    @ManyToMany(
-            mappedBy = "enrolledCourses",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
-    )
-    private Set<Member> enrolledMembers = new HashSet<>();
-
     @OneToMany(
             mappedBy = "course",
             cascade = CascadeType.ALL
     )
-    private Set<Review> reviews = new HashSet<>();
+    private Set<ReviewCourse> reviews = new HashSet<>();
 
-    @Column(nullable = false)
-    private LocalDate localDate;
-
-    @Column(nullable = false)
-    private LocalTime startTime;
-
-    @Column(nullable = false)
-    private LocalTime endTime;
-
-    @ManyToOne
-    @JoinColumn(name = "facility_id")
-    private Facility facility;
-
-    @ManyToOne
-    @JoinColumn(name = "instructor_id")
-    private Instructor instructor;
 }
 
 

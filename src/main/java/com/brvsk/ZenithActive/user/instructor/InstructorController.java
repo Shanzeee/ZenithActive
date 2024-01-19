@@ -17,9 +17,9 @@ public class InstructorController {
     private final InstructorService instructorService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNewInstructor(@RequestBody @Valid InstructorCreateRequest request) {
+    public ResponseEntity<String> createNewInstructorFromEmployee(@RequestBody @Valid InstructorCreateRequest request) {
         try {
-            instructorService.createNewInstructor(request);
+            instructorService.createNewInstructorFromEmployee(request);
             return ResponseEntity.status(HttpStatus.CREATED).body("Instructor created successfully");
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with provided ID.");

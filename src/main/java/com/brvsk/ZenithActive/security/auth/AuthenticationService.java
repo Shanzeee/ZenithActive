@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.security.auth;
 
 import com.brvsk.ZenithActive.user.User;
 import com.brvsk.ZenithActive.user.employee.Employee;
+import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.member.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,6 +13,8 @@ public interface AuthenticationService {
     AuthenticationResponse registerMember(RegisterMemberRequest request);
 
     AuthenticationResponse registerEmployee(RegisterEmployeeRequest request);
+
+    AuthenticationResponse registerInstructor(RegisterInstructorRequest request);
 
     AuthenticationResponse authenticate(AuthenticationRequest request);
 
@@ -29,4 +32,6 @@ public interface AuthenticationService {
     Member toMemberEntity(RegisterMemberRequest request);
 
     Employee toEmployeeEntity(RegisterEmployeeRequest request);
+
+    Instructor toInstructorEntity(RegisterInstructorRequest request);
 }

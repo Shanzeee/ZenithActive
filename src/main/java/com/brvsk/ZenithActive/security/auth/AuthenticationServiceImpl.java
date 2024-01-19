@@ -12,6 +12,8 @@ import com.brvsk.ZenithActive.user.User;
 import com.brvsk.ZenithActive.user.UserRepository;
 import com.brvsk.ZenithActive.user.employee.Employee;
 import com.brvsk.ZenithActive.user.employee.EmployeeRepository;
+import com.brvsk.ZenithActive.user.instructor.Instructor;
+import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +36,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
   private final UserRepository userRepository;
   private final MemberRepository memberRepository;
   private final EmployeeRepository employeeRepository;
+  private final InstructorRepository instructorRepository;
   private final TokenRepository tokenRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
@@ -65,6 +68,21 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     var jwtToken = jwtService.generateToken(employee);
     var refreshToken = jwtService.generateRefreshToken(employee);
     saveUserToken(savedEmployee, jwtToken);
+    return AuthenticationResponse.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .build();
+  }
+
+  @Override
+  public AuthenticationResponse registerInstructor(RegisterInstructorRequest request) {
+    checkIfEmailExists(request.getEmail());
+
+    Instructor instructor = toInstructorEntity(request);
+    var savedInstructor = instructorRepository.save(instructor);
+    var jwtToken = jwtService.generateToken(instructor);
+    var refreshToken = jwtService.generateRefreshToken(instructor);
+    saveUserToken(savedInstructor, jwtToken);
     return AuthenticationResponse.builder()
             .accessToken(jwtToken)
             .refreshToken(refreshToken)
@@ -180,6 +198,24 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     employee.setHireDate(LocalDate.now());
     employee.setAdditionalInformation(request.getAdditionalInformation());
     return employee;
+  }
+
+  @Override
+  public Instructor toInstructorEntity(RegisterInstructorRequest request){
+    Instructor instructor = new Instructor();
+    instructor.setUserId(UUID.randomUUID());
+    instructor.setFirstName(request.getFirstName());
+    instructor.setLastName(request.getLastName());
+    instructor.setGender(request.getGender());
+    instructor.setEmail(request.getEmail());
+    instructor.setPassword(passwordEncoder.encode(request.getPassword()));
+    instructor.setRole(Role.INSTRUCTOR);
+    instructor.setEmployeeType(request.getEmployeeType());
+    instructor.setHireDate(LocalDate.now());
+    instructor.setAdditionalInformation(request.getAdditionalInformation());
+    instructor.setDescription(request.getDescription());
+    instructor.setSpecialities(request.getSpecialities());
+    return instructor;
   }
 
   private void handleNewsletterSubscription(RegisterMemberRequest request){

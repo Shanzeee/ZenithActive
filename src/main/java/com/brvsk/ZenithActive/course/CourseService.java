@@ -10,8 +10,4 @@ public interface CourseService {
     void createNewCourse(CourseCreateRequest request);
     List<CourseResponse> getAllCourses();
     List<CourseResponse> getCoursesForCourseType(CourseType courseType);
-    List<CourseResponse> getCoursesForInstructor(UUID instructorId);
-    Set<CourseResponse> getCoursesForMember(UUID userId);
-    void enrolMemberToCourse(UUID courseId, UUID userId);
-    Set<MemberResponse> getMembersForCourse(UUID courseId);
 }

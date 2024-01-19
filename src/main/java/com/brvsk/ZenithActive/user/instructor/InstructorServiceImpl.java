@@ -22,7 +22,7 @@ public class InstructorServiceImpl implements InstructorService{
 
     @Override
     @Transactional
-    public void createNewInstructor(InstructorCreateRequest request){
+    public void createNewInstructorFromEmployee(InstructorCreateRequest request){
         UUID userId = request.getUserId();
         Employee employee = employeeRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));

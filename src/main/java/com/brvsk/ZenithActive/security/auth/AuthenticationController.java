@@ -29,6 +29,11 @@ public class AuthenticationController {
     return ResponseEntity.ok(authenticationService.registerEmployee(request));
   }
 
+  @PostMapping("/register_instructor")
+  public ResponseEntity<AuthenticationResponse> registerInstructor(@RequestBody @Valid RegisterInstructorRequest request) {
+    return ResponseEntity.ok(authenticationService.registerInstructor(request));
+  }
+
   @PostMapping("/authenticate")
   public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
     return ResponseEntity.ok(authenticationService.authenticate(request));

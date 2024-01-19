@@ -4,6 +4,9 @@ import com.brvsk.ZenithActive.course.*;
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.facility.FacilityNotFoundException;
 import com.brvsk.ZenithActive.facility.FacilityRepository;
+import com.brvsk.ZenithActive.facility.FacilityType;
+import com.brvsk.ZenithActive.membership.MembershipType;
+import com.brvsk.ZenithActive.membership.NoMembershipException;
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
@@ -59,6 +62,7 @@ public class SessionServiceImpl implements SessionService{
         Session session = getSession(sessionId);
         Member member = getMember(memberId);
 
+        performEnrollmentChecks(member, session);
         checkIfMemberAlreadyEnrolled(session, member);
         checkIfSessionIsFull(session);
 
@@ -130,6 +134,40 @@ public class SessionServiceImpl implements SessionService{
 
         if (hasOverlappingSessions) {
             throw new IllegalArgumentException("The instructor is not available during the specified hours.");
+        }
+    }
+
+    private void performEnrollmentChecks(Member member, Session session) {
+        checkIfMemberHasMembership(member);
+        checkIfMembershipIsValidForFacilityType(member.getMembership().getMembershipType(), session.getFacility().getFacilityType());
+        checkIfMembershipIsValidForMember(member, session);
+    }
+
+    private void checkIfMemberHasMembership(Member member) {
+        if (member.getMembership() == null) {
+            throw new NoMembershipException(member.getUserId());
+        }
+    }
+
+    private void checkIfMembershipIsValidForFacilityType(MembershipType memberMembershipType, FacilityType requiredFacilityType) {
+        if (!isMembershipValidForFacilityType(memberMembershipType, requiredFacilityType)) {
+            throw new RuntimeException("Member does not have the required membership type for enrollment");
+        }
+    }
+
+    private boolean isMembershipValidForFacilityType(MembershipType memberMembershipType, FacilityType requiredFacilityType) {
+        return switch (requiredFacilityType) {
+            case POOL -> memberMembershipType == MembershipType.POOL || memberMembershipType == MembershipType.FULL;
+            case GYM -> memberMembershipType == MembershipType.GYM || memberMembershipType == MembershipType.FULL;
+        };
+    }
+
+    private void checkIfMembershipIsValidForMember(Member member, Session session) {
+        LocalDate membershipEndDate = member.getMembership().getEndDate();
+        LocalDate sessionDate = session.getLocalDate();
+
+        if (sessionDate.isAfter(membershipEndDate)) {
+            throw new RuntimeException("Member is trying to enroll in a session after membership expiration date.");
         }
     }
 

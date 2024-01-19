@@ -1,16 +1,9 @@
 package com.brvsk.ZenithActive.course;
 
-import com.brvsk.ZenithActive.facility.Facility;
-import com.brvsk.ZenithActive.review.Review;
 import com.brvsk.ZenithActive.review.course.ReviewCourse;
-import com.brvsk.ZenithActive.user.instructor.Instructor;
-import com.brvsk.ZenithActive.user.member.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;

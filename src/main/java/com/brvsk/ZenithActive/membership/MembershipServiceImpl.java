@@ -64,9 +64,6 @@ public class MembershipServiceImpl implements MembershipService{
         return switch (membershipType) {
             case FULL -> basePoints * months * 3;
             case GYM, POOL -> basePoints * months;
-            case GYM_PLUS, POOL_PLUS -> (int) (basePoints * months * 1.2);
-            case PREMIUM -> basePoints * months * 4;
-            case PREMIUM_PLUS -> basePoints * months * 5;
         };
     }
 }

@@ -1,8 +1,8 @@
 package com.brvsk.ZenithActive.qrcode;
 
+import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -14,9 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,42 +24,11 @@ import java.util.UUID;
 public class QrCodeServiceImpl implements QrCodeService{
 
     private final MemberRepository memberRepository;
-
     @Override
-    public void saveQrCode(UUID userId) {
+    public BufferedImage generateQrCodeImage(UUID userId) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        QrCode qrCode = new QrCode();
-        qrCode.setUserId(userId);
-        qrCode.setExpirationDateTime(LocalDateTime.now().plusMinutes(180L));
-        String qrCodeString = generateQrCode(qrCode);
-        member.setQrCode(qrCodeString);
-
-        memberRepository.save(member);
-    }
-    private String generateQrCode(QrCode data) {
-        try {
-            Map<EncodeHintType, Object> hints = new HashMap<>();
-            hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-            QRCodeWriter writer = new QRCodeWriter();
-            BitMatrix bitMatrix = writer.encode(data.toString(), BarcodeFormat.QR_CODE, 200, 200, hints);
-
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            MatrixToImageWriter.writeToStream(bitMatrix, "PNG", outputStream);
-            byte[] qrCodeBytes = outputStream.toByteArray();
-
-            return Base64.getEncoder().encodeToString(qrCodeBytes);
-        } catch (WriterException e) {
-            System.err.println("Error generating QR code: " + e.getMessage());
-            return null;
-        } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
-    public BufferedImage generateQrCodeImage(QrCode data) {
+        QrCode data = buildQrCodeData(member);
         try {
             Map<EncodeHintType, Object> hints = new HashMap<>();
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
@@ -76,6 +43,14 @@ public class QrCodeServiceImpl implements QrCodeService{
             System.err.println("Unexpected error: " + e.getMessage());
             return null;
         }
+    }
+
+    private QrCode buildQrCodeData(Member member){
+        return QrCode.builder()
+                .userId(member.getUserId())
+                .membershipType(member.getMembership().getMembershipType())
+                .expirationDateTime(LocalDateTime.now().plusMinutes(15))
+                .build();
     }
 
 

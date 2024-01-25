@@ -51,9 +51,6 @@ public class Member extends User {
     @Column(name = "path")
     private Set<String> trainingPlanPaths = new HashSet<>();
 
-    @Column(length = 1000)
-    private String qrCode;
-
     @OneToMany(mappedBy = "member")
     private Set<LoyaltyPoints> loyaltyPoints = new HashSet<>();
 

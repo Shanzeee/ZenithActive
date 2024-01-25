@@ -3,12 +3,13 @@ package com.brvsk.ZenithActive.qrcode;
 import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.UUID;
 
 @RestController
@@ -18,15 +19,20 @@ public class QrCodeController {
 
     private final QrCodeService qrCodeService;
 
-    @PostMapping("/generate/{userId}")
-    public ResponseEntity<String> generateQrCode(@PathVariable UUID userId) {
+    @GetMapping(value = "/generate/{userId}", produces = MediaType.IMAGE_PNG_VALUE)
+    public ResponseEntity<byte[]> generateQrCode(@PathVariable UUID userId) {
         try {
-            qrCodeService.saveQrCode(userId);
-            return new ResponseEntity<>("QR code generated and saved successfully", HttpStatus.OK);
+            BufferedImage qrCodeImage = qrCodeService.generateQrCodeImage(userId);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(qrCodeImage, "png", baos);
+
+            byte[] imageBytes = baos.toByteArray();
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(imageBytes);
         } catch (UserNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while generating QR code", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

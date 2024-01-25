@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.user.member;
 
-import com.brvsk.ZenithActive.course.session.Session;
+import com.brvsk.ZenithActive.session.Session;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPoints;
 import com.brvsk.ZenithActive.membership.Membership;
 import com.brvsk.ZenithActive.review.course.ReviewCourse;

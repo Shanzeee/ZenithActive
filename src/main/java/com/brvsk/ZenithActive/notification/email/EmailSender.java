@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.notification.email;
 
-import com.brvsk.ZenithActive.course.session.Session;
+import com.brvsk.ZenithActive.session.Session;
 import com.brvsk.ZenithActive.notification.newsletter.NewsletterSubscriber;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.member.Member;

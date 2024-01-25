@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.course.session;
+package com.brvsk.ZenithActive.session;
 
 import com.brvsk.ZenithActive.course.*;
 import com.brvsk.ZenithActive.facility.Facility;

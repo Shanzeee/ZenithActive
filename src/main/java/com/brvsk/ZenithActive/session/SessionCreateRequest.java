@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.course.session;
+package com.brvsk.ZenithActive.session;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Max;

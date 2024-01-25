@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.course.session;
+package com.brvsk.ZenithActive.session;
 
 import com.brvsk.ZenithActive.course.CourseType;
 import lombok.Builder;

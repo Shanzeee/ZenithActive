@@ -1,5 +1,7 @@
-package com.brvsk.ZenithActive.diet;
+package com.brvsk.ZenithActive.diet.dietgenerator;
 
+import com.brvsk.ZenithActive.diet.DietDay;
+import com.brvsk.ZenithActive.diet.DietDayMeal;
 import com.brvsk.ZenithActive.diet.dietprofile.DietRequest;
 import com.brvsk.ZenithActive.diet.mealprofile.Allergy;
 import com.brvsk.ZenithActive.diet.mealprofile.MealCategory;
@@ -16,25 +18,22 @@ import java.util.stream.Collectors;
 public class DietGenerator {
 
     private final MealProfileRepository mealProfileRepository;
+    private final DietRecommendationService dietRecommendationService;
 
     public DietDay generateDailyDietDay(DietRequest dietRequest) {
         double totalCaloricNeeds = CaloricNeedsCalculator.calculateTotalCaloricNeeds(
                 dietRequest.getWeight(), dietRequest.getHeight(), dietRequest.getAge(),
                 dietRequest.getGender(), dietRequest.getActivityLevel());
 
-        List<MealProfile> availableMealProfiles = mealProfileRepository.findAll();
-
-        List<MealProfile> filteredMealProfiles = filterMealProfiles(dietRequest, availableMealProfiles);
+        List<MealProfile> filteredMealProfiles = filterMealProfiles(dietRequest, mealProfileRepository.findAll());
 
         Map<MealCategory, MealProfile> dietDayMeals = new HashMap<>();
-
-        dietDayMeals.put(MealCategory.BREAKFAST, selectMeal(filteredMealProfiles, MealCategory.BREAKFAST, totalCaloricNeeds));
-        dietDayMeals.put(MealCategory.LUNCH, selectMeal(filteredMealProfiles, MealCategory.LUNCH, totalCaloricNeeds));
-        dietDayMeals.put(MealCategory.DINNER, selectMeal(filteredMealProfiles, MealCategory.DINNER, totalCaloricNeeds));
-        dietDayMeals.put(MealCategory.DESSERT, selectMeal(filteredMealProfiles, MealCategory.DESSERT, totalCaloricNeeds));
-
-        double remainingCalories = calculateRemainingCalories(new ArrayList<>(dietDayMeals.values()), totalCaloricNeeds);
-        dietDayMeals.put(MealCategory.SNACK, selectSnacks(filteredMealProfiles, remainingCalories));
+        for (MealCategory category : MealCategory.values()) {
+            double categoryCaloricNeeds = totalCaloricNeeds * getTargetPercentage(category) / 100.0;
+            List<MealProfile> categoryMeals = selectMealsForCategory(filteredMealProfiles, category, categoryCaloricNeeds);
+            MealProfile selectedMeal = dietRecommendationService.recommendMealForCategory(categoryMeals, dietRequest);
+            dietDayMeals.put(category, selectedMeal);
+        }
 
         return DietDay.builder()
                 .dietDayMeals(createDietDayMeals(dietDayMeals))
@@ -84,37 +83,12 @@ public class DietGenerator {
                 .collect(Collectors.toList());
     }
 
-    private MealProfile selectMeal(List<MealProfile> mealProfiles, MealCategory category, double totalCaloricNeeds) {
-        List<MealProfile> eligibleMeals = mealProfiles.stream()
-                .filter(mealProfile -> mealProfile.getMealCategory().equals(category))
-                .sorted(Comparator.comparingDouble(mealProfile -> calculatePercentageDifference(mealProfile, category, totalCaloricNeeds)))
-                .toList();
-
-        return eligibleMeals.get(0);
-    }
-
-    private double calculatePercentageDifference(MealProfile mealProfile, MealCategory category, double totalCaloricNeeds) {
-        double targetPercentage = getTargetPercentage(category);
-        double mealCalories = mealProfile.getTotalCalories();
-        double currentPercentage = (mealCalories / totalCaloricNeeds) * 100.0;
-        return Math.abs(targetPercentage - currentPercentage);
-    }
-
-    private double calculateRemainingCalories(List<MealProfile> dietPlan, double totalCaloricNeeds) {
-        double caloriesConsumed = dietPlan.stream()
-                .mapToDouble(MealProfile::getTotalCalories)
-                .sum();
-        return Math.max(0, totalCaloricNeeds - caloriesConsumed);
-    }
-
-    private MealProfile selectSnacks(List<MealProfile> mealProfiles, double remainingCalories) {
-        List<MealProfile> eligibleSnacks = mealProfiles.stream()
-                .filter(mealProfile -> mealProfile.getMealCategory().equals(MealCategory.SNACK))
-                .filter(snack -> snack.getTotalCalories() >= remainingCalories)
-                .sorted(Comparator.comparingDouble(MealProfile::getTotalCalories))
-                .toList();
-
-        return eligibleSnacks.get(0);
+    private List<MealProfile> selectMealsForCategory(List<MealProfile> mealProfiles, MealCategory category, double categoryCaloricNeeds) {
+        return mealProfiles.stream()
+                .filter(meal -> meal.getMealCategory().equals(category))
+                .sorted(Comparator.comparingDouble(meal -> Math.abs(meal.getTotalCalories() - categoryCaloricNeeds)))
+                .limit(10)
+                .collect(Collectors.toList());
     }
 
     private double getTargetPercentage(MealCategory category) {

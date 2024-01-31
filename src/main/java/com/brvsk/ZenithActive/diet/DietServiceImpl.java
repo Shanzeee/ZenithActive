@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.diet;
 
+import com.brvsk.ZenithActive.diet.dietgenerator.DietGenerator;
 import com.brvsk.ZenithActive.diet.dietprofile.DietRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

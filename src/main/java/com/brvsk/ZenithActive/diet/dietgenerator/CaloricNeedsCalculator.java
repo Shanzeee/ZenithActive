@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.diet;
+package com.brvsk.ZenithActive.diet.dietgenerator;
 
 import com.brvsk.ZenithActive.diet.dietprofile.ActivityLevel;
 import com.brvsk.ZenithActive.user.Gender;

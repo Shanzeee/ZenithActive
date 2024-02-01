@@ -8,10 +8,7 @@ import com.brvsk.ZenithActive.diet.mealprofile.MealProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -63,12 +60,9 @@ public class DietRecommendationService {
         return commonAllergies > 0 ? 1.0 : 0.0;
     }
 
-    public MealProfile recommendMealForCategory(List<MealProfile> meals, DietRequest dietRequest) {
-
-        Map<UUID, Double> similarDietRequests = findSimilarDietRequests(dietRequest);
+    public Optional<MealProfile> recommendMealForCategory(List<MealProfile> meals, DietRequest dietRequest) {
         return meals.stream()
-                .max((meal1, meal2) -> compareMeals(meal1, meal2, similarDietRequests))
-                .orElse(null);
+                .max((meal1, meal2) -> compareMeals(meal1, meal2, findSimilarDietRequests(dietRequest)));
     }
 
     private int compareMeals(MealProfile meal1, MealProfile meal2, Map<UUID, Double> similarDietRequests) {

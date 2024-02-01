@@ -20,9 +20,9 @@ public class DietController {
     @PostMapping("/createOneDayDiet")
     public ResponseEntity<String> createOneDayDiet(@RequestBody @Valid DietRequest dietRequest) {
         try {
-            dietService.createOneDayDiet(dietRequest);
+            dietService.createDiet(dietRequest);
             return new ResponseEntity<>("Diet created successfully", HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
+        } catch (RuntimeException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return new ResponseEntity<>("An internal server error occurred", HttpStatus.INTERNAL_SERVER_ERROR);

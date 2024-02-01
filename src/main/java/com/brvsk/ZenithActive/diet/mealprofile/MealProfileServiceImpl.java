@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.diet.mealprofile;
 
+import com.brvsk.ZenithActive.diet.dietprofile.DietRequest;
 import com.brvsk.ZenithActive.diet.ingredient.Ingredient;
 import com.brvsk.ZenithActive.diet.ingredient.IngredientRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +20,31 @@ public class MealProfileServiceImpl implements MealProfileService {
     private final IngredientRepository ingredientRepository;
     private final MealProfileMapper mealProfileMapper;
 
+
+    @Override
+    public List<MealProfile> findAllMeals() {
+        return mealProfileRepository.findAll();
+    }
+
+    @Override
+    public List<MealProfile> filterMeals(DietRequest dietRequest) {
+        Stream<MealProfile> stream = findAllMeals().stream();
+
+        if (dietRequest.isVegetarian()) {
+            stream = stream.filter(MealProfile::isVegetarian);
+        }
+
+        if (dietRequest.isVegan()) {
+            stream = stream.filter(MealProfile::isVegan);
+        }
+
+        if (dietRequest.getAllergies() != null && !dietRequest.getAllergies().isEmpty()) {
+            stream = stream.filter(mealProfile ->
+                    mealProfile.getAllergens().stream().noneMatch(dietRequest.getAllergies()::contains));
+        }
+
+        return stream.collect(Collectors.toList());
+    }
 
     @Override
     public List<MealProfileResponse> getAllMealProfiles() {

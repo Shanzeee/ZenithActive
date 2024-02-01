@@ -40,4 +40,6 @@ public class DietRequest {
     private boolean isVegetarian;
     private boolean isVegan;
 
+    private int days;
+
 }

@@ -18,7 +18,8 @@ import java.util.UUID;
 public class MealProfile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meal_profile_seq")
+    @SequenceGenerator(name = "meal_profile_seq", sequenceName = "meal_profile_seq", allocationSize = 1)
     private UUID id;
 
     private String name;

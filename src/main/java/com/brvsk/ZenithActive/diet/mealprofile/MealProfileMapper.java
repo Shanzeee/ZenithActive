@@ -12,10 +12,7 @@ public class MealProfileMapper {
         return MealProfileResponse.builder()
                 .id(mealProfile.getId())
                 .name(mealProfile.getName())
-                .ingredientIds(mealProfile.getIngredients()
-                        .stream()
-                        .map(Ingredient::getId)
-                        .collect(Collectors.toList()))
+                .ingredientsName(mealProfile.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList()))
                 .mealCategory(mealProfile.getMealCategory())
                 .allergens(mealProfile.getAllergens())
                 .totalCalories(mealProfile.getTotalCalories())
@@ -24,6 +21,15 @@ public class MealProfileMapper {
                 .totalCarbohydrates(mealProfile.getTotalCarbohydrates())
                 .isVegetarian(mealProfile.isVegetarian())
                 .isVegan(mealProfile.isVegan())
+                .build();
+    }
+
+    public MealProfileResponseSimple mapToResponseSimple(MealProfile mealProfile) {
+        return MealProfileResponseSimple.builder()
+                .id(mealProfile.getId())
+                .name(mealProfile.getName())
+                .ingredientsName(mealProfile.getIngredients().stream().map(Ingredient::getName).collect(Collectors.toList()))
+                .totalCalories(mealProfile.getTotalCalories())
                 .build();
     }
 

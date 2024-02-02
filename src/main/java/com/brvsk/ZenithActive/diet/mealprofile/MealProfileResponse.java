@@ -13,7 +13,7 @@ import java.util.UUID;
 public class MealProfileResponse {
     private UUID id;
     private String name;
-    private List<Long> ingredientIds;
+    private List<String> ingredientsName;
     private MealCategory mealCategory;
     private List<Allergy> allergens;
     private double totalCalories;

@@ -16,6 +16,11 @@ public class DietRecommendationService {
     private final DietRequestRepository dietRequestRepository;
     private final MemberMealPreferenceRepository memberMealPreferenceRepository;
 
+    public Optional<MealProfile> recommendMealForCategory(List<MealProfile> meals, DietRequest dietRequest) {
+        return meals.stream()
+                .max((meal1, meal2) -> compareMeals(meal1, meal2, findSimilarDietRequests(dietRequest)));
+    }
+
     public Map<UUID, Double> findSimilarDietRequests(DietRequest targetDietRequest) {
         List<DietRequest> allDietRequests = dietRequestRepository.findAll();
         Map<UUID, Double> similarityScores = new HashMap<>();
@@ -58,11 +63,6 @@ public class DietRecommendationService {
     private double calculateAllergySimilarity(List<Allergy> allergies1, List<Allergy> allergies2) {
         long commonAllergies = allergies1.stream().filter(allergies2::contains).count();
         return commonAllergies > 0 ? 1.0 : 0.0;
-    }
-
-    public Optional<MealProfile> recommendMealForCategory(List<MealProfile> meals, DietRequest dietRequest) {
-        return meals.stream()
-                .max((meal1, meal2) -> compareMeals(meal1, meal2, findSimilarDietRequests(dietRequest)));
     }
 
     private int compareMeals(MealProfile meal1, MealProfile meal2, Map<UUID, Double> similarDietRequests) {

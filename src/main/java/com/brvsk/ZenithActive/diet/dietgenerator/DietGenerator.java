@@ -80,7 +80,8 @@ public class DietGenerator {
     private MealProfile findClosestCaloricMeal(List<MealProfile> meals, double targetCalories) {
         return meals.stream()
                 .min(Comparator.comparingDouble(meal -> Math.abs(meal.getTotalCalories() - targetCalories)))
-                .orElseThrow(() -> new RuntimeException("Cannot find default meal: " + targetCalories));
+                .stream().findFirst()
+                .orElseGet(() -> meals.get(0));
     }
 
     private double getTargetPercentage(MealCategory category) {

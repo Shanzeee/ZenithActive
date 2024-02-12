@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.session;
+package com.brvsk.ZenithActive.enrollment;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

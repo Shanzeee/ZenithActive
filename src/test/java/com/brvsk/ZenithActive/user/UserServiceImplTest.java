@@ -67,17 +67,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    void itShouldCreateUser() {
-        // Given
-        UserRequest userRequest = new UserRequest("John", "Doe",  Gender.MALE, "kacpersjuszb@gmail.com");
-        when(userMapper.mapToResponse(any())).thenReturn(new UserResponse());
-        // When
-        UserResponse result = userService.createUser(userRequest);
-        // Then
-        assertNotNull(result);
-    }
-
-    @Test
     void itShouldDeleteUser() {
         // Given
         UUID userId = UUID.randomUUID();

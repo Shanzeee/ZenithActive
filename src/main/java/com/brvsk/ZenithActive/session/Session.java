@@ -1,9 +1,9 @@
 package com.brvsk.ZenithActive.session;
 
 import com.brvsk.ZenithActive.course.Course;
+import com.brvsk.ZenithActive.enrollment.SessionEnrollment;
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
-import com.brvsk.ZenithActive.user.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
@@ -52,11 +52,7 @@ public class Session {
     @Column(nullable = false)
     private LocalTime endTime;
 
-    @ManyToMany(
-            mappedBy = "enrolledSessions",
-            fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
-    )
-    private Set<Member> enrolledMembers = new HashSet<>();
+    @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SessionEnrollment> enrollments = new HashSet<>();
 
 }

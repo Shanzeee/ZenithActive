@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.user.member;
 
-import com.brvsk.ZenithActive.session.Session;
+import com.brvsk.ZenithActive.enrollment.SessionEnrollment;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPoints;
 import com.brvsk.ZenithActive.membership.Membership;
 import com.brvsk.ZenithActive.review.course.ReviewCourse;
@@ -30,12 +30,8 @@ public class Member extends User {
     private Integer height;
     private Integer weight;
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_session_enrollment",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "session_id"))
-    private Set<Session> enrolledSessions = new HashSet<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SessionEnrollment> enrollments = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
     private Set<ReviewInstructor> reviewInstructors = new HashSet<>();

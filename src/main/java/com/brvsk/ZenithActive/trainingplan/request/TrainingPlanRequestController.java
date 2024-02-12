@@ -8,6 +8,7 @@ import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class TrainingPlanRequestController {
     private final TrainingPlanRequestService trainingPlanRequestService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<String> createTrainingPlanRequest(@RequestBody TrainingPlanRequestCreateCommand command) {
         try {
             trainingPlanRequestService.createTrainingPlanRequest(command);
@@ -34,6 +36,7 @@ public class TrainingPlanRequestController {
     }
 
     @GetMapping("/pending")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<List<TrainingPlanRequestResponse>> getPendingTrainingPlanRequests() {
         try {
             List<TrainingPlanRequestResponse> pendingRequests =
@@ -45,6 +48,7 @@ public class TrainingPlanRequestController {
     }
 
     @GetMapping("/pending/{id}")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<TrainingPlanRequestResponseDetailedInfo> getTrainingPlanRequestById(@PathVariable UUID id) {
         try {
             TrainingPlanRequestResponseDetailedInfo requestDetails =

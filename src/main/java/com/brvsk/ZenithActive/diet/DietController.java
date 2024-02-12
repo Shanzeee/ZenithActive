@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class DietController {
     private final DietService dietService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('EMPLOYEE')")
     public ResponseEntity<String> createDiet(@RequestBody @Valid DietRequest dietRequest) {
         try {
             dietService.createDiet(dietRequest);
@@ -31,6 +33,7 @@ public class DietController {
     }
 
     @GetMapping("/member/{memberId}")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
     public ResponseEntity<List<DietResponse>> getDietsForMember(@PathVariable UUID memberId) {
         try {
             List<DietResponse> diets = dietService.getDietsForMember(memberId);
@@ -43,6 +46,7 @@ public class DietController {
     }
 
     @GetMapping("/meals/member/{memberId}")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
     public ResponseEntity<List<MealProfileResponseSimple>> getMealsForDiets(@PathVariable UUID memberId) {
         try {
             List<MealProfileResponseSimple> meals = dietService.getMealsForDiets(memberId);

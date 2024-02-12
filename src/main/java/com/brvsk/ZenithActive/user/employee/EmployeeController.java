@@ -5,6 +5,7 @@ import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
         try {
             List<EmployeeResponse> employees = employeeService.getAllEmployees();
@@ -28,6 +30,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<EmployeeResponse> getEmployeeById(@PathVariable UUID userId) {
         try {
             EmployeeResponse employeeResponse = employeeService.getEmployeeById(userId);
@@ -40,6 +43,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/delete/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteEmployee(@PathVariable UUID userId) {
         try {
             employeeService.deleteEmployee(userId);

@@ -31,29 +31,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse createUser(UserRequest userRequest) {
-        if (userRepository.existsByEmail(userRequest.getEmail())){
-            throw new EmailAlreadyExistsException(userRequest.getEmail());
-        }
-
-        User newUser = toEntity(userRequest);
-        userRepository.save(newUser);
-
-        return userMapper.mapToResponse(newUser);
-    }
-
-    @Override
     public void deleteUser(UUID userId) {
         userRepository.deleteById(userId);
     }
 
-    private User toEntity(UserRequest userRequest){
-        return User.builder()
-                .userId(UUID.randomUUID())
-                .firstName(userRequest.getFirstName())
-                .lastName(userRequest.getLastName())
-                .gender(userRequest.getGender())
-                .email(userRequest.getEmail())
-                .build();
-    }
 }

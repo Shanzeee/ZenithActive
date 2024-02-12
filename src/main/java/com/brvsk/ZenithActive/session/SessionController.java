@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class SessionController {
 
     @Transactional
     @PostMapping
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<String> createNewSession(@RequestBody @Valid SessionCreateRequest request) {
         try {
             sessionService.createNewSession(request);
@@ -35,6 +37,7 @@ public class SessionController {
 
     @Transactional
     @PostMapping("/enroll")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('EMPLOYEE')")
     public ResponseEntity<String> enrollMemberToSession(@RequestParam UUID sessionId, @RequestParam UUID memberId) {
         try {
             sessionService.enrollMemberToSession(sessionId, memberId);
@@ -87,6 +90,7 @@ public class SessionController {
     }
 
     @GetMapping("/{sessionId}/members")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<Set<MemberResponse>> getMembersForSession(@PathVariable UUID sessionId) {
         try {
             Set<MemberResponse> members = sessionService.getMembersForSession(sessionId);

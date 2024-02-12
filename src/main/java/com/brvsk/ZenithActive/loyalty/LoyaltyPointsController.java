@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class LoyaltyPointsController {
     private final LoyaltyPointsService loyaltyPointsService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<String> addLoyaltyPoints(@RequestBody @Valid LoyaltyPointsCreateRequest request) {
         try {
             loyaltyPointsService.addLoyaltyPoints(request);
@@ -29,6 +31,7 @@ public class LoyaltyPointsController {
     }
 
     @GetMapping("/total-points-new/{memberId}")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('ADMIN')")
     public ResponseEntity<Integer> getTotalPointsForMember(@PathVariable UUID memberId) {
         try {
             int totalPoints = loyaltyPointsService.getTotalPointsForMember(memberId);
@@ -41,6 +44,7 @@ public class LoyaltyPointsController {
     }
 
     @GetMapping("/count-given-points-today")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Long> countGivenPointsToday() {
         try {
             long count = loyaltyPointsService.countGivenPointsToday();

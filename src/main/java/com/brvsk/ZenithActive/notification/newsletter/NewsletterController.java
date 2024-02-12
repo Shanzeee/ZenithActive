@@ -3,6 +3,7 @@ package com.brvsk.ZenithActive.notification.newsletter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ public class NewsletterController {
 
 
     @GetMapping("/confirm/{email}")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<String> confirmNewsletterSubscription(@PathVariable String email) {
         try {
             String confirmationMessage = newsletterService.confirmNewsletterSubscription(email);
@@ -30,6 +32,7 @@ public class NewsletterController {
 
     @Transactional
     @DeleteMapping("/unsubscribe/{email}")
+    @PreAuthorize("hasRole('MEMBER')")
     public ResponseEntity<String> unsubscribeNewsletter(@PathVariable String email) {
         try {
             newsletterService.unsubscribeNewsletter(email);

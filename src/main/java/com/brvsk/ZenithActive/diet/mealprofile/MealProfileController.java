@@ -3,6 +3,7 @@ package com.brvsk.ZenithActive.diet.mealprofile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class MealProfileController {
     private final MealProfileService mealProfileService;
 
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<String> createNewMealProfile(@RequestBody MealProfileCreateRequest request) {
         try {
             mealProfileService.createMealProfile(request);
@@ -48,6 +50,7 @@ public class MealProfileController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<?> updateMealProfile(@PathVariable UUID id, @RequestBody MealProfileCreateRequest updateRequest) {
         try {
             MealProfileResponse updatedMealProfile = mealProfileService.updateMealProfile(id, updateRequest);
@@ -60,6 +63,7 @@ public class MealProfileController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('EMPLOYEE')")
     public ResponseEntity<String> deleteMealProfile(@PathVariable UUID id) {
         try {
             mealProfileService.deleteMealProfile(id);

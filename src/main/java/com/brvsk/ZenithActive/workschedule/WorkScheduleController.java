@@ -4,6 +4,7 @@ import com.brvsk.ZenithActive.user.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.YearMonth;
@@ -18,6 +19,7 @@ public class WorkScheduleController {
     private final WorkScheduleService workScheduleService;
 
     @PostMapping
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<String> addNewWorkSchedule(@RequestBody WorkScheduleCreateRequest request) {
         try {
             workScheduleService.addNewWorkSchedule(request);
@@ -30,6 +32,7 @@ public class WorkScheduleController {
     }
 
     @GetMapping("/{employeeId}")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<List<WorkScheduleResponse>> getWorkSchedulesByEmployeeId(@PathVariable UUID employeeId) {
         try {
             List<WorkScheduleResponse> workSchedules = workScheduleService.getWorkSchedulesByEmployeeId(employeeId);
@@ -40,6 +43,7 @@ public class WorkScheduleController {
     }
 
     @GetMapping("/current/{employeeId}")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<WorkScheduleResponse> getWorkScheduleForCurrentMonth(@PathVariable UUID employeeId) {
         try {
             WorkScheduleResponse workSchedule = workScheduleService.getWorkScheduleForCurrentMonth(employeeId);
@@ -50,6 +54,7 @@ public class WorkScheduleController {
     }
 
     @GetMapping("/next/{employeeId}")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<WorkScheduleResponse> getWorkScheduleForNextMonth(@PathVariable UUID employeeId) {
         try {
             WorkScheduleResponse workSchedule = workScheduleService.getWorkScheduleForNextMonth(employeeId);
@@ -60,6 +65,7 @@ public class WorkScheduleController {
     }
 
     @GetMapping("/all/{year}/{month}")
+    @PreAuthorize("hasRole('EMPLOYEE') or hasRole('ADMIN')")
     public ResponseEntity<List<WorkScheduleResponse>> getWorkSchedulesForAllEmployeesInMonth(
             @PathVariable int year, @PathVariable int month) {
         try {

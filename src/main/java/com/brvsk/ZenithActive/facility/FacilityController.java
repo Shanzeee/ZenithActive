@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class FacilityController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Facility> addFacility(@RequestBody @Valid FacilityRequest request) {
         try {
             Facility addedFacility = facilitiesService.addFacility(request);
@@ -49,6 +51,7 @@ public class FacilityController {
     }
 
     @DeleteMapping("/{facilityId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteFacility(@PathVariable UUID facilityId) {
         try {
             facilitiesService.deleteFacility(facilityId);

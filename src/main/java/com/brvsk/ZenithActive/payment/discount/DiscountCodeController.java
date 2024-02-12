@@ -2,6 +2,7 @@ package com.brvsk.ZenithActive.payment.discount;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
@@ -18,12 +19,14 @@ public class DiscountCodeController {
     private final DiscountCodeService discountCodeService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createDiscountCode(@RequestBody @Valid DiscountCodeCreateRequest request) {
         discountCodeService.createDiscountCode(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Discount code created successfully");
     }
 
     @DeleteMapping("/{code}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteDiscountCode(@PathVariable String code) {
         try {
             discountCodeService.deleteDiscountCode(code);
@@ -36,6 +39,7 @@ public class DiscountCodeController {
     }
 
     @GetMapping("/calculate/{code}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Integer> calculateDiscountPercentage(@PathVariable String code) {
         try {
             Integer discountPercentage = discountCodeService.calculateDiscountPercentage(code);
@@ -46,6 +50,7 @@ public class DiscountCodeController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<DiscountCode>> getAllDiscountCodes() {
         List<DiscountCode> discountCodes = discountCodeService.getAllDiscountCodes();
         return ResponseEntity.ok(discountCodes);

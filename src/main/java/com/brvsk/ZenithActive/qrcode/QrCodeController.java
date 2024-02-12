@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
@@ -20,6 +21,7 @@ public class QrCodeController {
     private final QrCodeService qrCodeService;
 
     @GetMapping(value = "/generate/{userId}", produces = MediaType.IMAGE_PNG_VALUE)
+    @PreAuthorize("hasRole('MEMBER') or hasRole('EMPLOYEE')")
     public ResponseEntity<byte[]> generateQrCode(@PathVariable UUID userId) {
         try {
             BufferedImage qrCodeImage = qrCodeService.generateQrCodeImage(userId);

@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,6 +18,7 @@ public class InstructorController {
     private final InstructorService instructorService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> createNewInstructorFromEmployee(@RequestBody @Valid InstructorCreateRequest request) {
         try {
             instructorService.createNewInstructorFromEmployee(request);
@@ -31,6 +33,7 @@ public class InstructorController {
     }
 
     @DeleteMapping("/{instructorId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteInstructor(@PathVariable UUID instructorId) {
         try {
             instructorService.deleteInstructor(instructorId);

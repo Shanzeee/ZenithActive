@@ -1,9 +1,8 @@
 package com.brvsk.ZenithActive.user;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,24 +17,21 @@ public class UserController {
 
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> getUserById(@PathVariable UUID userId) {
         UserResponse user = userService.getUserById(userId);
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> createUser(@RequestBody @Valid UserRequest userRequest) {
-        UserResponse newUser = userService.createUser(userRequest);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-    }
-
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable UUID userId) {
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();

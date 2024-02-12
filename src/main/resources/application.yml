@@ -55,3 +55,9 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
+
+weather:
+  api:
+    key: 2AM8U8FC8JFGW7M2HT6LD352N
+    url: https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/cracow/

@@ -25,8 +25,9 @@ import java.util.Set;
 @NoArgsConstructor
 public class Member extends User {
 
-    @OneToOne
-    private Membership membership;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Membership> memberships = new ArrayList<>();
+
     private Integer height;
     private Integer weight;
 

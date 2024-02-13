@@ -30,6 +30,7 @@ public class Membership {
     @Column(nullable = false)
     private LocalDate endDate;
 
-    @OneToOne(mappedBy = "membership", cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 }

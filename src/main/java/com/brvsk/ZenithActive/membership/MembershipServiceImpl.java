@@ -3,7 +3,7 @@ package com.brvsk.ZenithActive.membership;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsCreateRequest;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsType;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MembershipServiceImpl implements MembershipService{
 
-    private final MembershipRepository membershipRepository;
     private final MemberRepository memberRepository;
     private final LoyaltyPointsService loyaltyPointsService;
 
@@ -27,9 +26,7 @@ public class MembershipServiceImpl implements MembershipService{
 
         Membership membership = toEntity(request);
         membership.setMember(member);
-        membershipRepository.save(membership);
-
-        member.setMembership(membership);
+        member.getMemberships().add(membership);
         memberRepository.save(member);
 
         LoyaltyPointsCreateRequest loyaltyPointsCreateRequest = buildLoyaltyPointsCreateRequest(request.getMembershipType(), request.getNumberOfMonths(), request.getMemberId());

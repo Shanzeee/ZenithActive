@@ -1,6 +1,6 @@
 package com.brvsk.ZenithActive.membership;
 
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

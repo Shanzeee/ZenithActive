@@ -3,6 +3,7 @@ package com.brvsk.ZenithActive.enrollment;
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.facility.FacilityType;
 import com.brvsk.ZenithActive.membership.Membership;
+import com.brvsk.ZenithActive.membership.MembershipRepository;
 import com.brvsk.ZenithActive.membership.MembershipType;
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.session.Session;
@@ -42,6 +43,8 @@ class SessionEnrollmentServiceImplTest {
     private MemberMapper memberMapper;
     @Mock
     private EmailSender emailSender;
+    @Mock
+    private MembershipRepository membershipRepository;
 
     @Test
     void enrollMemberToSession_Valid() {
@@ -58,10 +61,11 @@ class SessionEnrollmentServiceImplTest {
         membership.setMembershipType(MembershipType.FULL);
         membership.setEndDate(LocalDate.now().plusDays(10));
         Member member = new Member();
-        member.setMembership(membership);
+        member.getMemberships().add(membership);
 
         when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
+        when(membershipRepository.findByMember_UserIdAndStartDateBeforeAndEndDateAfter(any(),any(),any())).thenReturn(List.of(membership));
 
         // When
         sessionEnrollmentService.enrollMemberToSession(sessionId, memberId);
@@ -88,7 +92,7 @@ class SessionEnrollmentServiceImplTest {
         membership.setMembershipType(MembershipType.GYM);
         membership.setEndDate(LocalDate.now().plusDays(10));
         Member member = new Member();
-        member.setMembership(membership);
+        member.getMemberships().add(membership);
 
         when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
         when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
@@ -107,7 +111,7 @@ class SessionEnrollmentServiceImplTest {
         UUID memberId = UUID.randomUUID();
         Session session = new Session();
         Member member = new Member();
-        member.setMembership(createMembership(LocalDate.now().minusDays(1)));
+        member.getMemberships().add(createMembership(LocalDate.now().minusDays(1)));
 
         when(sessionRepository.findById(sessionId)).thenReturn(java.util.Optional.of(session));
         when(memberRepository.findById(memberId)).thenReturn(java.util.Optional.of(member));

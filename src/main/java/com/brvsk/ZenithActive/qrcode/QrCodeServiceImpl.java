@@ -1,6 +1,8 @@
 package com.brvsk.ZenithActive.qrcode;
 
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
+import com.brvsk.ZenithActive.membership.Membership;
+import com.brvsk.ZenithActive.membership.MembershipRepository;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
 import com.google.zxing.BarcodeFormat;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.awt.image.BufferedImage;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +27,15 @@ import java.util.UUID;
 public class QrCodeServiceImpl implements QrCodeService{
 
     private final MemberRepository memberRepository;
+    private final MembershipRepository membershipRepository;
     @Override
     public BufferedImage generateQrCodeImage(UUID userId) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        QrCode data = buildQrCodeData(member);
+
+        Membership latestMembership = getLatestActiveMembership(userId);
+
+        QrCode data = buildQrCodeData(member, latestMembership);
         try {
             Map<EncodeHintType, Object> hints = new HashMap<>();
             hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
@@ -45,10 +52,17 @@ public class QrCodeServiceImpl implements QrCodeService{
         }
     }
 
-    private QrCode buildQrCodeData(Member member){
+    private Membership getLatestActiveMembership(UUID userId) {
+        return membershipRepository.findByMember_UserIdAndEndDateAfterOrderByEndDateDesc(userId, LocalDate.now())
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No active membership found"));
+    }
+
+    private QrCode buildQrCodeData(Member member, Membership latestMembership) {
         return QrCode.builder()
                 .userId(member.getUserId())
-                .membershipType(member.getMembership().getMembershipType())
+                .membershipType(latestMembership.getMembershipType())
                 .expirationDateTime(LocalDateTime.now().plusMinutes(15))
                 .build();
     }

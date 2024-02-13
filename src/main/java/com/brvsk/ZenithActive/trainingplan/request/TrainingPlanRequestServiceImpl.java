@@ -10,7 +10,7 @@ import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestRespon
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestResponseDetailedInfo;
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
 import com.brvsk.ZenithActive.trainingplan.request.exception.TrainingPlanRequestNotFoundException;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
 import lombok.RequiredArgsConstructor;

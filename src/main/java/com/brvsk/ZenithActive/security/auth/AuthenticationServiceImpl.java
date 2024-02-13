@@ -6,7 +6,7 @@ import com.brvsk.ZenithActive.security.config.JwtService;
 import com.brvsk.ZenithActive.security.token.Token;
 import com.brvsk.ZenithActive.security.token.TokenRepository;
 import com.brvsk.ZenithActive.security.token.TokenType;
-import com.brvsk.ZenithActive.user.EmailAlreadyExistsException;
+import com.brvsk.ZenithActive.excpetion.EmailAlreadyExistsException;
 import com.brvsk.ZenithActive.user.Role;
 import com.brvsk.ZenithActive.user.User;
 import com.brvsk.ZenithActive.user.UserRepository;

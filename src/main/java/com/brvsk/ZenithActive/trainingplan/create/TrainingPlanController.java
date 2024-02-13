@@ -2,7 +2,7 @@ package com.brvsk.ZenithActive.trainingplan.create;
 
 import com.brvsk.ZenithActive.trainingplan.create.dto.TrainingPlanCreateRequest;
 import com.brvsk.ZenithActive.trainingplan.request.exception.TrainingPlanRequestNotFoundException;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

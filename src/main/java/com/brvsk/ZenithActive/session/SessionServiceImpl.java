@@ -1,13 +1,13 @@
 package com.brvsk.ZenithActive.session;
 
 import com.brvsk.ZenithActive.course.Course;
-import com.brvsk.ZenithActive.course.CourseNotFoundException;
+import com.brvsk.ZenithActive.excpetion.CourseNotFoundException;
 import com.brvsk.ZenithActive.course.CourseRepository;
 import com.brvsk.ZenithActive.course.CourseType;
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.facility.FacilityNotFoundException;
 import com.brvsk.ZenithActive.facility.FacilityRepository;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
 import lombok.RequiredArgsConstructor;

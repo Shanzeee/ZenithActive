@@ -2,7 +2,7 @@ package com.brvsk.ZenithActive.diet.mealprefernce;
 
 import com.brvsk.ZenithActive.diet.mealprofile.MealProfile;
 import com.brvsk.ZenithActive.diet.mealprofile.MealProfileRepository;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.member.Member;
 import com.brvsk.ZenithActive.user.member.MemberRepository;
 import lombok.RequiredArgsConstructor;

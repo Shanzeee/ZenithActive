@@ -4,7 +4,7 @@ import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestCreate
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestResponse;
 import com.brvsk.ZenithActive.trainingplan.request.dto.TrainingPlanRequestResponseDetailedInfo;
 import com.brvsk.ZenithActive.trainingplan.request.exception.TrainingPlanRequestNotFoundException;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

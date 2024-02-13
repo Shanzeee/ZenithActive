@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.workschedule;
 
 import com.brvsk.ZenithActive.notification.email.EmailSender;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.employee.Employee;
 import com.brvsk.ZenithActive.user.employee.EmployeeRepository;
 import org.junit.jupiter.api.Test;

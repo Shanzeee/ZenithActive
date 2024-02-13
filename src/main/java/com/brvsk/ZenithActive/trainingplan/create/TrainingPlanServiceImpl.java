@@ -15,7 +15,7 @@ import com.brvsk.ZenithActive.trainingplan.create.entity.TrainingPlan;
 import com.brvsk.ZenithActive.trainingplan.request.TrainingPlanRequestRepository;
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
 import com.brvsk.ZenithActive.trainingplan.request.exception.TrainingPlanRequestNotFoundException;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

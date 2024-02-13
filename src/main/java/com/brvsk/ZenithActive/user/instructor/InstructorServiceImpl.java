@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.user.instructor;
 
 import com.brvsk.ZenithActive.user.User;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.UserRepository;
 import com.brvsk.ZenithActive.user.employee.Employee;
 import com.brvsk.ZenithActive.user.employee.EmployeeRepository;

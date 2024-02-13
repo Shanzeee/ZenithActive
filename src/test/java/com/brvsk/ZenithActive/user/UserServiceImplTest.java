@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.user;
 
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

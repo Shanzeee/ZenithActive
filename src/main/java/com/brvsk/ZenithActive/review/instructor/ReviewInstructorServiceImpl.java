@@ -4,7 +4,7 @@ import com.brvsk.ZenithActive.loyalty.LoyaltyPointsCreateRequest;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsType;
 import com.brvsk.ZenithActive.review.*;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
 import com.brvsk.ZenithActive.user.member.Member;

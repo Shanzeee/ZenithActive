@@ -3,7 +3,7 @@ package com.brvsk.ZenithActive.review.instructor;
 import com.brvsk.ZenithActive.review.ReviewCreateRequest;
 import com.brvsk.ZenithActive.review.ReviewResponse;
 import com.brvsk.ZenithActive.review.ReviewService;
-import com.brvsk.ZenithActive.user.UserNotFoundException;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

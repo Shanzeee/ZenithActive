@@ -1,6 +1,7 @@
 package com.brvsk.ZenithActive.user;
 
 
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

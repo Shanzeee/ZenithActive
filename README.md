@@ -4,7 +4,7 @@
 ZenithActive is an advanced fitness management application designed to streamline the management of fitness centers and member services. With a holistic approach to health and fitness management, ZenithActive offers comprehensive solutions for fitness centers, trainers, and users seeking personalized workout and diet plans. Built with scalability in mind, the application supports a wide range of functionalities, from membership management to diet generator algorithm.
 
 
-
+![ZenithActive Logo by DALL•E](data/assets/ZenithActiveLogo.png)
 
 
 

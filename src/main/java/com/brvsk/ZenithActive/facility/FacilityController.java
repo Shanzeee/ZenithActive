@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.facility;
 
+import com.brvsk.ZenithActive.excpetion.FacilityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -3,6 +3,7 @@ package com.brvsk.ZenithActive.review.course;
 import com.brvsk.ZenithActive.course.Course;
 import com.brvsk.ZenithActive.excpetion.CourseNotFoundException;
 import com.brvsk.ZenithActive.course.CourseRepository;
+import com.brvsk.ZenithActive.excpetion.ReviewAlreadyExistsException;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsCreateRequest;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsType;

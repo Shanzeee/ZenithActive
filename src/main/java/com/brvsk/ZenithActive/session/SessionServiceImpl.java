@@ -5,7 +5,7 @@ import com.brvsk.ZenithActive.excpetion.CourseNotFoundException;
 import com.brvsk.ZenithActive.course.CourseRepository;
 import com.brvsk.ZenithActive.course.CourseType;
 import com.brvsk.ZenithActive.facility.Facility;
-import com.brvsk.ZenithActive.facility.FacilityNotFoundException;
+import com.brvsk.ZenithActive.excpetion.FacilityNotFoundException;
 import com.brvsk.ZenithActive.facility.FacilityRepository;
 import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.user.instructor.Instructor;

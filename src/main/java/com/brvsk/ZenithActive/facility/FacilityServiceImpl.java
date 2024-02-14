@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.facility;
 
+import com.brvsk.ZenithActive.excpetion.FacilityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

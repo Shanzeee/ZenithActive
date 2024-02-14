@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.review.instructor;
 
+import com.brvsk.ZenithActive.excpetion.ReviewAlreadyExistsException;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsCreateRequest;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsService;
 import com.brvsk.ZenithActive.loyalty.LoyaltyPointsType;

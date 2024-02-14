@@ -1,8 +1,7 @@
 
 # ZenithActive - Ver.0.0.1 Release(2023.12)
 
-ZenithActive is a comprehensive fitness management application designed to streamline various aspects of fitness centers and membership services. Explore the key features below.
-
+ZenithActive is an advanced fitness management application designed to streamline the management of fitness centers and member services. With a holistic approach to health and fitness management, ZenithActive offers comprehensive solutions for fitness centers, trainers, and users seeking personalized workout and diet plans. Built with scalability in mind, the application supports a wide range of functionalities, from membership management to diet generator algorithm.
 
 
 
@@ -16,46 +15,55 @@ ZenithActive is a comprehensive fitness management application designed to strea
 - Docker
 - JUnit 5
 - Mockito
-- Zxing
-- Twilio
-- Prometheus
-- Jenkins
+- Spring Security with JWT
+- OpenWeatherMap (API for weather info)
+- Zxing (QR code generation)
+- Twilio (SMS notifications)
+- Prometheus (monitoring)
+- Jenkins (CI/CD)
 
 
 ## Features:
 
-1. Add users with roles (member and instructor).
+1. **User and Role Management**: Ability to add users with different roles (member, instructor).
 
-2. Create new Facility objects.
+2. **Facility Management**: Creation of new Facility objects.
 
-3. Create courses and assign them to a specific facility and time range.
+3. **Courses and Sessions**: Creating courses and sessions assigning them to specific facilities and time slots.
 
-4. Allow members to enroll in courses.
+4. **Session Enrollment**: Allowing members to enroll in sessions.
 
-5. Add reviews for courses.
+5. **Course/Instructor Reviews**: Adding reviews to courses and instructors.
 
-6. Enable sign-ups for various types of memberships.
+6. **Membership Types**: Options for enrolling in different types of memberships.
 
-7. Provide a newsletter feature for updates and announcements.
+7. **Newsletter**: Newsletter functionality for updates and announcements.
 
-8. Send emails and SMS with promotions and reminders.
+8. **Notifications**: Sending emails and SMS for promotions and reminders.
 
-9. Generate PDFs with personalized training plans.
+9. **Personalized Training Plans**: Generating PDFs with training plans.
 
-10. Generate QR codes for access to specific facilities.
+10. **QR Codes**: Generating QR codes for access to specific facilities.
 
-11. Loyalty points system.
+11. **Loyalty Points System**: Managing loyalty points for members.
+
+12. **Diet generator**: Algorithm for generating diet based on request and meal recommendation system.
+
+13. **Work schedule**: Manage employees' schedules
+
+14. **Connect to weather API**: User can check what the weather forecast will be for a given session day
 
 ### TODO:
 
 1. Allow exchanging loyalty points for rewards.
+2. Possibility for members to add meals.
+3. Generating a diet based on the given ingredients.
+4. Informing about dangerous weather events and inviting users to indoor sessions.
 
-2. Enable sign-ups for individual training sessions.
-
-3.  Live chat feature for direct communication with mentors or instructors.
 ## Installing and Running
 
 ### Prerequisites:
+- Java 17
 - Docker installed on your machine.
 
 ### Steps:
@@ -113,11 +121,17 @@ This command will stop and remove the running containers.
 - Customize environment variables and configurations in the docker-compose.yml file as needed.
 - You can modify the Dockerfile and other configuration files based on your application's requirements.
 
-## Database schema:
-![Database schema](data/assets/database_schema.png)
+## Database schema(core):
+![Database core schema](data/assets/database_core_schema.png)
+## Database schema(diet):
+![Database diet schema](data/assets/database_diet_schema.png)
+
+## The entire database schema in drawio:
+Click [here](data/assets/database_schema.drawio) to download schema in drawio
+
 ## API Documentation
 
-Application exposes a robust API with over 40 endpoints to cater to various functionalities. For detailed information on each endpoint, you can explore the API documentation using Swagger UI. After launching the application, visit http://localhost:8080/swagger-ui/index.html#/ to interactively explore and understand the available endpoints, request parameters, and response structures.
+Application exposes a robust API with over 60 endpoints to cater to various functionalities. For detailed information on each endpoint, you can explore the API documentation using Swagger UI. After launching the application, visit http://localhost:8080/swagger-ui/index.html#/ to interactively explore and understand the available endpoints, request parameters, and response structures.
 
 
 

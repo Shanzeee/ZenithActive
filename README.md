@@ -148,4 +148,5 @@ Feel free to explore, modify, and contribute to ZenithActive within the bounds o
 ## Contact
 
 Kacper Barwiński - kbarwinski00@gmail.com
+
 Project Link: https://github.com/Shanzeee/ZenithActive

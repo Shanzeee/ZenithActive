@@ -144,3 +144,8 @@ The MIT License is a permissive open-source license that allows for the free use
 I believe in the collaborative spirit of the open-source community, and the MIT License reflects our commitment to fostering a transparent and accessible platform for the benefit of fitness enthusiasts, administrators, and developers alike.
 
 Feel free to explore, modify, and contribute to ZenithActive within the bounds of the MIT License. Let's build a healthier and more connected future together! :)
+
+## Contact
+
+Kacper Barwiński - kbarwinski00@gmail.com
+Project Link: https://github.com/Shanzeee/ZenithActive

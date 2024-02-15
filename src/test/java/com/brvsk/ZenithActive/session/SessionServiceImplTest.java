@@ -1,11 +1,10 @@
-package com.brvsk.ZenithActive.course.session;
+package com.brvsk.ZenithActive.session;
 
 import com.brvsk.ZenithActive.course.Course;
 import com.brvsk.ZenithActive.course.CourseRepository;
 import com.brvsk.ZenithActive.course.CourseType;
 import com.brvsk.ZenithActive.facility.Facility;
 import com.brvsk.ZenithActive.facility.FacilityRepository;
-import com.brvsk.ZenithActive.session.*;
 import com.brvsk.ZenithActive.user.instructor.Instructor;
 import com.brvsk.ZenithActive.user.instructor.InstructorRepository;
 import org.junit.jupiter.api.Test;

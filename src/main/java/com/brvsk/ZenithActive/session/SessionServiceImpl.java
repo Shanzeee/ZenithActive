@@ -39,7 +39,7 @@ public class SessionServiceImpl implements SessionService{
         validateSessionHours(request.getLocalDate(), request.getStartTime(), request.getEndTime(), facility);
         validateInstructorAvailability(request.getLocalDate(),request.getStartTime(),request.getEndTime(), instructor);
 
-        Session session = toDto(request);
+        Session session = toEntity(request);
         session.setCourse(course);
         session.setFacility(facility);
         session.setInstructor(instructor);
@@ -102,7 +102,7 @@ public class SessionServiceImpl implements SessionService{
                 .orElseThrow(() -> new UserNotFoundException(instructorId));
     }
 
-    private Session toDto (SessionCreateRequest request) {
+    private Session toEntity (SessionCreateRequest request) {
         return Session.builder()
                 .groupSize(request.getGroupSize())
                 .localDate(request.getLocalDate())

@@ -61,3 +61,10 @@ weather:
   api:
     key: 2AM8U8FC8JFGW7M2HT6LD352N
     url: https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/cracow/
+
+aws:
+  region: eu-west-1
+  s3:
+    buckets:
+      user: zenith-user-profile
+      training: zenith-training-plan

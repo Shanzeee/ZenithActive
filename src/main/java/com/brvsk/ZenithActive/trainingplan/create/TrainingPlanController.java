@@ -7,10 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/training-plans")
@@ -30,5 +29,15 @@ public class TrainingPlanController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the training plan");
         }
+    }
+
+    @GetMapping("/{memberId}/{trainingPlanRequestId}/pdf")
+    @PreAuthorize("hasRole('MEMBER')")
+    public ResponseEntity<byte[]> getTrainingPlanPdf(@PathVariable UUID memberId, @PathVariable UUID trainingPlanRequestId) {
+        byte[] pdfContent = trainingPlanService.getTrainingPlanPdf(memberId, trainingPlanRequestId);
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/pdf")
+                .header("Content-Disposition", "inline; filename=\"training-plan.pdf\"")
+                .body(pdfContent);
     }
 }

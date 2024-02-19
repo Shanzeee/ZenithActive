@@ -1,8 +1,8 @@
 package com.brvsk.ZenithActive.user;
 
 
+import com.brvsk.ZenithActive.excpetion.S3FileNotFound;
 import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
-import com.brvsk.ZenithActive.excpetion.UserProfileImageNotFound;
 import com.brvsk.ZenithActive.s3.S3Buckets;
 import com.brvsk.ZenithActive.s3.S3Service;
 import io.micrometer.common.util.StringUtils;
@@ -67,13 +67,19 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
         if (StringUtils.isBlank(user.getProfileImageId())) {
-            throw new UserProfileImageNotFound(userId);
+            throw new S3FileNotFound(user.getProfileImageId());
         }
 
-        return s3Service.getObject(
-                s3Buckets.getUser(),
-                "profile-images/%s/%s".formatted(userId, user.getProfileImageId())
-        );
+        String pdfKey = String.format("profile-images/%s/%s", userId, user.getProfileImageId());
+
+        try{
+            return s3Service.getObject(
+                    s3Buckets.getUser(),
+                    pdfKey);
+
+        } catch (Exception e) {
+            throw new S3FileNotFound(pdfKey);
+        }
     }
 
     private void checkIfUserExistsOrThrow(UUID userId) {

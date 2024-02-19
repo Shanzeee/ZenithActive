@@ -11,15 +11,44 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+@Component
 public class PdfTrainingPlanGenerator {
 
-    public static void createTrainingPlanPdf(TrainingPlan trainingPlan, String outputFolder, String fileName) {
+
+    public byte[] createTrainingPlanPdf(TrainingPlan trainingPlan) {
+        Document document = new Document();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        try {
+            PdfWriter.getInstance(document, byteArrayOutputStream);
+            document.open();
+
+            addTitle(document);
+            addMemberInfoParagraph(document, trainingPlan);
+            addInstructorInfoParagraph(document, trainingPlan);
+            addEmptyLine(document, 1);
+
+            PdfPTable table = createTrainingDaysTable(trainingPlan.getTrainingDays());
+            document.add(table);
+
+            document.close();
+            return byteArrayOutputStream.toByteArray();
+        } catch (DocumentException e) {
+            throw new RuntimeException("Failed to generate PDF", e);
+        }
+    }
+
+    // Old method without AWS S3
+    public void createTrainingPlanPdf(TrainingPlan trainingPlan, String outputFolder, String fileName) {
         Document document = new Document();
 
         try {
@@ -49,7 +78,7 @@ public class PdfTrainingPlanGenerator {
         }
     }
 
-    private static PdfPTable createTrainingDaysTable(List<TrainingDay> trainingDays) {
+    private PdfPTable createTrainingDaysTable(List<TrainingDay> trainingDays) {
         PdfPTable table = new PdfPTable(8);
 
         Font dayOfWeekFont = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.BOLD);
@@ -112,13 +141,13 @@ public class PdfTrainingPlanGenerator {
         return table;
     }
 
-    private static void addEmptyLine(Document document, int lines) throws DocumentException {
+    private void addEmptyLine(Document document, int lines) throws DocumentException {
         for (int i = 0; i < lines; i++) {
             document.add(Chunk.NEWLINE);
         }
     }
 
-    private static void addMemberInfoParagraph(Document document, TrainingPlan trainingPlan) throws DocumentException {
+    private void addMemberInfoParagraph(Document document, TrainingPlan trainingPlan) throws DocumentException {
         Member member = trainingPlan.getMember();
         TrainingPlanRequest trainingPlanRequest = trainingPlan.getTrainingPlanRequest();
 
@@ -132,14 +161,14 @@ public class PdfTrainingPlanGenerator {
         document.add(memberParagraph);
     }
 
-    private static void addTitle(Document document) throws DocumentException {
+    private void addTitle(Document document) throws DocumentException {
         Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
         Paragraph titleParagraph = new Paragraph("TRAINING PLAN", titleFont);
         titleParagraph.setAlignment(Element.ALIGN_CENTER);
         document.add(titleParagraph);
     }
 
-    private static void addInstructorInfoParagraph(Document document, TrainingPlan trainingPlan) throws DocumentException {
+    private void addInstructorInfoParagraph(Document document, TrainingPlan trainingPlan) throws DocumentException {
         Paragraph instructorIdParagraph = new Paragraph(
                 "MADE BY: " + trainingPlan.getInstructor().getFirstName() + " " + trainingPlan.getInstructor().getLastName()
         );

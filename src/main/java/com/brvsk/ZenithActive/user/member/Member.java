@@ -43,10 +43,10 @@ public class Member extends User {
     @OneToMany(mappedBy = "member")
     private List<TrainingPlanRequest> trainingPlanRequestList = new ArrayList<>();
 
-    @ElementCollection
-    @CollectionTable(name = "training_plan_paths", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "path")
-    private Set<String> trainingPlanPaths = new HashSet<>();
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "training_plan_s3_keys", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "training_plan_s3_key")
+    private Set<String> trainingPlanS3Keys = new HashSet<>();
 
     @OneToMany(mappedBy = "member")
     private Set<LoyaltyPoints> loyaltyPoints = new HashSet<>();

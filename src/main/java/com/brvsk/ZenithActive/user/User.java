@@ -32,6 +32,8 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+    @Column(unique = true)
+    private String profileImageId;
 
 
     @Override

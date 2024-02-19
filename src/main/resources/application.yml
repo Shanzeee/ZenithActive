@@ -67,4 +67,4 @@ aws:
   s3:
     buckets:
       user: zenith-user-profile
-      training: zenith-training-plan
+      trainingPlan: zenith-training-plan

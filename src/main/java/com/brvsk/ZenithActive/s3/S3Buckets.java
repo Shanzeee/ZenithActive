@@ -1,27 +1,29 @@
 package com.brvsk.ZenithActive.s3;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @ConfigurationProperties(prefix = "aws.s3.buckets")
+@EnableConfigurationProperties(S3Buckets.class)
 public class S3Buckets {
-    private String customer;
-    private String trainingPlans;
+    private String user;
+    private String trainingPlan;
 
-    public String getCustomer() {
-        return customer;
+    public String getUser() {
+        return user;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setUser(String user) {
+        this.user = user;
     }
 
-    public String getTrainingPlans() {
-        return trainingPlans;
+    public String getTrainingPlan() {
+        return trainingPlan;
     }
 
-    public void setTrainingPlans(String trainingPlans) {
-        this.trainingPlans = trainingPlans;
+    public void setTrainingPlan(String trainingPlan) {
+        this.trainingPlan = trainingPlan;
     }
 }

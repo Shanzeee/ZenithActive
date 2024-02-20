@@ -1,5 +1,7 @@
 package com.brvsk.ZenithActive.qrcode;
 
+import com.brvsk.ZenithActive.excpetion.NoMembershipException;
+import com.brvsk.ZenithActive.excpetion.QrCodeGenerationException;
 import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
 import com.brvsk.ZenithActive.membership.Membership;
 import com.brvsk.ZenithActive.membership.MembershipRepository;
@@ -44,11 +46,9 @@ public class QrCodeServiceImpl implements QrCodeService{
 
             return MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
-            System.err.println("Error generating QR code: " + e.getMessage());
-            return null;
+            throw new QrCodeGenerationException("Error generating QR code for user ID: " + userId, e);
         } catch (Exception e) {
-            System.err.println("Unexpected error: " + e.getMessage());
-            return null;
+            throw new RuntimeException("Unexpected error", e);
         }
     }
 
@@ -56,7 +56,7 @@ public class QrCodeServiceImpl implements QrCodeService{
         return membershipRepository.findByMember_UserIdAndEndDateAfterOrderByEndDateDesc(userId, LocalDate.now())
                 .stream()
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No active membership found"));
+                .orElseThrow(() -> new NoMembershipException(userId));
     }
 
     private QrCode buildQrCodeData(Member member, Membership latestMembership) {

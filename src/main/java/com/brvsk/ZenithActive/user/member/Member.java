@@ -40,7 +40,7 @@ public class Member extends User {
     @OneToMany(mappedBy = "member")
     private Set<ReviewCourse> reviewCourses = new HashSet<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<TrainingPlanRequest> trainingPlanRequestList = new ArrayList<>();
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -48,7 +48,7 @@ public class Member extends User {
     @Column(name = "training_plan_s3_key")
     private Set<String> trainingPlanS3Keys = new HashSet<>();
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private Set<LoyaltyPoints> loyaltyPoints = new HashSet<>();
 
 }

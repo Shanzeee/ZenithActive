@@ -7,6 +7,7 @@ import com.brvsk.ZenithActive.security.token.Token;
 import com.brvsk.ZenithActive.security.token.TokenRepository;
 import com.brvsk.ZenithActive.security.token.TokenType;
 import com.brvsk.ZenithActive.excpetion.EmailAlreadyExistsException;
+import com.brvsk.ZenithActive.user.Gender;
 import com.brvsk.ZenithActive.user.Role;
 import com.brvsk.ZenithActive.user.User;
 import com.brvsk.ZenithActive.user.UserRepository;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -88,6 +90,33 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             .refreshToken(refreshToken)
             .build();
   }
+
+  @Override
+  public AuthenticationResponse createAdmin() {
+    User admin = new User(
+            UUID.fromString("00000000-0000-0000-0000-000000000000"),
+            "admin",
+            "admin",
+            Gender.OTHER,
+            "kbarwinski00@gmail.com",
+            "admin",
+            Role.ADMIN,
+            new ArrayList<>(),
+            null
+    );
+
+
+    var savedAdmin = userRepository.save(admin);
+    var jwtToken = jwtService.generateToken(admin);
+    var refreshToken = jwtService.generateRefreshToken(admin);
+    saveUserToken(savedAdmin, jwtToken);
+    return AuthenticationResponse.builder()
+            .accessToken(jwtToken)
+            .refreshToken(refreshToken)
+            .build();
+  }
+
+
 
   @Override
   public AuthenticationResponse authenticate(AuthenticationRequest request) {

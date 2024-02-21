@@ -16,6 +16,8 @@ public interface AuthenticationService {
 
     AuthenticationResponse registerInstructor(RegisterInstructorRequest request);
 
+    AuthenticationResponse createAdmin();
+
     AuthenticationResponse authenticate(AuthenticationRequest request);
 
     void saveUserToken(User user, String jwtToken);

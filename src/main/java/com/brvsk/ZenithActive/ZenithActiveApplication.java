@@ -68,6 +68,8 @@ public class ZenithActiveApplication {
 			System.out.println("Instructor token: " +
 					authenticationService.registerInstructor(instructor).getAccessToken());
 
+			System.out.println("Admin token: " + authenticationService.createAdmin().getAccessToken());
+
 		};
 	}
 

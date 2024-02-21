@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -20,18 +19,11 @@ public class SessionEnrollmentController {
 
     private final SessionEnrollmentService sessionEnrollmentService;
 
-    @Transactional
     @PostMapping("/enroll")
     @PreAuthorize("hasRole('MEMBER') or hasRole('EMPLOYEE')")
     public ResponseEntity<String> enrollMemberToSession(@RequestParam UUID sessionId, @RequestParam UUID memberId) {
-        try {
-            sessionEnrollmentService.enrollMemberToSession(sessionId, memberId);
-            return ResponseEntity.ok("Member enrolled to session successfully");
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>("An internal server error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        sessionEnrollmentService.enrollMemberToSession(sessionId, memberId);
+        return ResponseEntity.ok("Member enrolled to session successfully");
     }
 
     @GetMapping("/byMemberId/{userId}")

@@ -74,7 +74,7 @@ public class SessionEnrollmentServiceImpl implements SessionEnrollmentService{
     private void performEnrollmentChecks(Member member, Session session) {
         checkIfMemberAlreadyEnrolled(member, session);
         checkIfSessionIsFull(session);
-        List<Membership> activeMemberships = checkIfMemberHasActiveMemberships(member);
+        List<Membership> activeMemberships = checkIfMemberHasActiveMemberships(member, session.getLocalDate());
         checkIfValidMembershipExistsForSession(activeMemberships, session);
     }
 
@@ -93,9 +93,9 @@ public class SessionEnrollmentServiceImpl implements SessionEnrollmentService{
         }
     }
 
-    private List<Membership> checkIfMemberHasActiveMemberships(Member member) {
+    private List<Membership> checkIfMemberHasActiveMemberships(Member member, LocalDate sessionDate) {
         List<Membership> activeMemberships = membershipRepository.findByMember_UserIdAndStartDateBeforeAndEndDateAfter(
-                member.getUserId(), LocalDate.now(), LocalDate.now());
+                member.getUserId(), sessionDate, sessionDate);
 
         if (activeMemberships.isEmpty()) {
             throw new NoMembershipException(member.getUserId());

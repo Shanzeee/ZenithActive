@@ -1,4 +1,6 @@
 package com.brvsk.ZenithActive.excpetion;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,6 +15,7 @@ import javax.naming.AuthenticationException;
 import java.nio.file.AccessDeniedException;
 
 @ControllerAdvice
+@Log4j2
 public class GlobalExceptionHandler {
 
 
@@ -128,11 +131,16 @@ public class GlobalExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
-
-
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<?> handleDataAccessException(DataAccessException ex, WebRequest request) {
+        log.error("Data access exception occurred", ex);
+        ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST, "A database error occurred", request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globalExceptionHandler(Exception ex, WebRequest request) {
+        log.error("Global exception handler caught exception: ", ex);
         ErrorDetails errorDetails = new ErrorDetails(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }

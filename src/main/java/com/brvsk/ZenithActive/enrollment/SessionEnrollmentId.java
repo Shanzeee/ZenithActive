@@ -1,9 +1,6 @@
 package com.brvsk.ZenithActive.enrollment;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -14,6 +11,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class SessionEnrollmentId implements Serializable {
     private UUID memberId;
     private UUID sessionId;

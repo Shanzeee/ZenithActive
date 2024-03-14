@@ -19,7 +19,7 @@ public class TrainingPlanController {
     private final TrainingPlanService trainingPlanService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasRole('MEMBER')")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
     public ResponseEntity<String> createTrainingPlan(@RequestBody TrainingPlanCreateRequest trainingPlanCreateRequest) {
         try {
             trainingPlanService.createTrainingPlan(trainingPlanCreateRequest);

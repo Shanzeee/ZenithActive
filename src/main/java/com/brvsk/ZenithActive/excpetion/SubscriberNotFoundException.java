@@ -1,4 +1,4 @@
-package com.brvsk.ZenithActive.notification.newsletter;
+package com.brvsk.ZenithActive.excpetion;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -2,6 +2,8 @@ package com.brvsk.ZenithActive.trainingplan.create;
 
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import com.brvsk.ZenithActive.pdf.PdfTrainingPlanGenerator;
+import com.brvsk.ZenithActive.s3.S3Buckets;
+import com.brvsk.ZenithActive.s3.S3Service;
 import com.brvsk.ZenithActive.trainingplan.create.dto.TrainingPlanCreateRequest;
 import com.brvsk.ZenithActive.trainingplan.request.TrainingPlanRequestRepository;
 import com.brvsk.ZenithActive.trainingplan.request.entity.TrainingPlanRequest;
@@ -35,6 +37,12 @@ public class TrainingPlanServiceImplTest {
     private EmailSender emailSender;
     @Mock
     private PdfTrainingPlanGenerator pdfTrainingPlanGenerator;
+    @Mock
+    private TrainingPlanMapper trainingPlanMapper;
+    @Mock
+    private S3Buckets s3Buckets;
+    @Mock
+    private S3Service s3Service;
     @InjectMocks
     private TrainingPlanServiceImpl trainingPlanService;
 

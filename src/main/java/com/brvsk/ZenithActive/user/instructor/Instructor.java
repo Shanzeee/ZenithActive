@@ -1,7 +1,7 @@
 package com.brvsk.ZenithActive.user.instructor;
 
-import com.brvsk.ZenithActive.session.Session;
 import com.brvsk.ZenithActive.review.instructor.ReviewInstructor;
+import com.brvsk.ZenithActive.session.Session;
 import com.brvsk.ZenithActive.user.employee.Employee;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

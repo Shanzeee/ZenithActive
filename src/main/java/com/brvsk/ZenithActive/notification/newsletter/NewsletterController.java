@@ -1,5 +1,7 @@
 package com.brvsk.ZenithActive.notification.newsletter;
 
+import com.brvsk.ZenithActive.excpetion.AlreadySubscribedException;
+import com.brvsk.ZenithActive.excpetion.SubscriberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

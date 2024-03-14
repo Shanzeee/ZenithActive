@@ -28,6 +28,6 @@ public class MemberMealPreference {
     @JoinColumn(name = "meal_profile_id")
     private MealProfile mealProfile;
 
-    @Column(name = "preference_score", columnDefinition = "DECIMAL(3,1) CHECK (preference_score >= 0 AND preference_score <= 5)")
+    @Column(name = "preference_score")
     private double preferenceScore;
 }

@@ -4,6 +4,9 @@ import com.brvsk.ZenithActive.diet.dietgenerator.DietGenerator;
 import com.brvsk.ZenithActive.diet.dietprofile.DietRequest;
 import com.brvsk.ZenithActive.diet.mealprofile.MealProfileMapper;
 import com.brvsk.ZenithActive.diet.mealprofile.MealProfileResponseSimple;
+import com.brvsk.ZenithActive.excpetion.UserNotFoundException;
+import com.brvsk.ZenithActive.user.member.Member;
+import com.brvsk.ZenithActive.user.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,15 +21,20 @@ public class DietServiceImpl implements DietService{
     private final DietRepository dietRepository;
     private final DietGenerator dietGenerator;
     private final DietMapper dietMapper;
+    private final MemberRepository memberRepository;
     private final MealProfileMapper mealProfileMapper;
 
     @Override
     public void createDiet(DietRequest dietRequest) {
         List<DietDay> dietDayList = dietGenerator.generateDiet(dietRequest);
 
+        Member member = memberRepository.findById(dietRequest.getMemberId())
+                .orElseThrow(() -> new UserNotFoundException(dietRequest.getMemberId()));
+
         Diet diet = Diet
                 .builder()
                 .dailyMealPlans(dietDayList)
+                .member(member)
                 .build();
 
         dietRepository.save(diet);

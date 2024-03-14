@@ -2,7 +2,6 @@ package com.brvsk.ZenithActive.diet.dietprofile;
 
 import com.brvsk.ZenithActive.diet.mealprofile.Allergy;
 import com.brvsk.ZenithActive.user.Gender;
-import com.brvsk.ZenithActive.user.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,8 +21,7 @@ public class DietRequest {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @ManyToOne
-    private Member member;
+    private UUID memberId;
 
     private Gender gender;
     private int age;

@@ -1,5 +1,6 @@
 package com.brvsk.ZenithActive.utils;
 
+@Deprecated
 public enum Months {
     JANUARY,
     FEBRUARY,

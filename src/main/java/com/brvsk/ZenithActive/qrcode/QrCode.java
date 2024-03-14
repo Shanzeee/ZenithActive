@@ -17,4 +17,13 @@ public class QrCode {
     private LocalDateTime expirationDateTime;
     private boolean isUsed;
 
+    @Override
+    public String toString() {
+        return "QrCode{" +
+                "userId=" + userId +
+                ", membershipType=" + membershipType +
+                ", expirationDateTime=" + expirationDateTime +
+                ", isUsed=" + isUsed +
+                '}';
+    }
 }

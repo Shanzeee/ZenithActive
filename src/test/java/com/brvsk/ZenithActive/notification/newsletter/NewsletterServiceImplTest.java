@@ -1,5 +1,7 @@
 package com.brvsk.ZenithActive.notification.newsletter;
 
+import com.brvsk.ZenithActive.excpetion.AlreadySubscribedException;
+import com.brvsk.ZenithActive.excpetion.SubscriberNotFoundException;
 import com.brvsk.ZenithActive.notification.email.EmailSender;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -124,7 +124,7 @@ public class EmailSenderImpl implements EmailSender{
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(from);
         message.setTo(email);
-        message.setSubject("Newsletter Subscription Confirmation");
+        message.setSubject("Purchase Subscription Confirmation");
         message.setText("Dear " + fullName + ",\n\n"
                 + "Thank you for your purchase\n"
                 + "It is your purchase number: " + purchaseNumber + "\n\n"

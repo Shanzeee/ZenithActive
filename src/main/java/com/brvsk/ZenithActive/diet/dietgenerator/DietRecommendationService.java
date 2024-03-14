@@ -27,7 +27,7 @@ public class DietRecommendationService {
 
         for (DietRequest dietRequest : allDietRequests) {
             double score = calculateSimilarityScore(targetDietRequest, dietRequest);
-            similarityScores.put(dietRequest.getMember().getUserId(), score);
+            similarityScores.put(dietRequest.getMemberId(), score);
         }
 
         return similarityScores;
